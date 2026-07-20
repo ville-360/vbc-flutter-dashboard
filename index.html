@@ -550,7 +550,7 @@
 
   <section class="stats">
     <div class="stat-card done">
-      <div class="num">8</div>
+      <div class="num">9</div>
       <div class="label">Completed</div>
     </div>
     <div class="stat-card partial">
@@ -562,7 +562,7 @@
       <div class="label">Planned</div>
     </div>
     <div class="stat-card overall">
-      <div class="num">38%</div>
+      <div class="num">40%</div>
       <div class="label">Overall complete</div>
     </div>
   </section>
@@ -570,13 +570,13 @@
   <section class="progress-panel">
     <div class="progress-panel-top">
       <h2>Overall progress</h2>
-      <span class="progress-pct">38%</span>
+      <span class="progress-pct">40%</span>
     </div>
     <div class="progress-track">
-      <div class="progress-fill" style="width: 38%;"></div>
+      <div class="progress-fill" style="width: 40%;"></div>
     </div>
     <div class="progress-caption">
-      <span>25 tracked work items</span>
+      <span>26 tracked work items</span>
       <span>Weighted: done = 100%, in progress = 50%</span>
     </div>
   </section>
@@ -585,9 +585,9 @@
     <div class="panel">
       <h2><span class="dot"></span>Current status &amp; milestone</h2>
       <span class="milestone-tag">Current milestone</span>
-      <p><strong>2D card lifecycle plus contacts is feature-complete:</strong> a user can sign up for a free trial, create a 2D card, edit it, set it active, share it (QR, message, email, WhatsApp/Telegram, native share sheet), view it full-screen, manage their team under Users, and build a saved-contacts address book by scanning a contact's QR code — all talking to the real production backend with unchanged request formats.</p>
+      <p><strong>2D card lifecycle plus contacts is feature-complete:</strong> a user can sign up for a free trial, create a 2D card, edit it, set it active, share it (QR, message, email, WhatsApp/Telegram, native share sheet), view it full-screen, manage their team under Users, build a saved-contacts address book by scanning a QR code, and send a push-notification announcement to everyone who has their card — all talking to the real production backend with unchanged request formats.</p>
       <span class="milestone-tag next">Next milestone</span>
-      <p><strong>Announcements &amp; notifications.</strong> The announcement compose/receive flow and push notifications are the last pieces of the app's core day-to-day usage loop still outstanding.</p>
+      <p><strong>Receiving announcements &amp; push notifications.</strong> Sending is done; showing an announcement/notification to the people who receive one is the last piece of the app's core day-to-day usage loop still outstanding.</p>
     </div>
     <div class="panel">
       <h2><span class="dot" style="background: var(--risk);"></span>Risks &amp; blockers</h2>
@@ -696,9 +696,13 @@
     </div>
 
     <div class="area">
-      <h3>Engagement <span class="count">0 / 3 done</span></h3>
+      <h3>Engagement <span class="count">1 / 4 done</span></h3>
+      <div class="feature-row" data-status="done">
+        <div><div class="name">Send announcement</div><div class="note">Message + optional image, from the main view's active-card panel</div></div>
+        <span class="pill done">Done</span>
+      </div>
       <div class="feature-row" data-status="planned">
-        <div><div class="name">Announcements (send / receive)</div></div>
+        <div><div class="name">Receive announcements</div><div class="note">Shown automatically on login if the tenant has an active one</div></div>
         <span class="pill planned">Planned</span>
       </div>
       <div class="feature-row" data-status="planned">
@@ -740,6 +744,11 @@
   <section class="changelog">
     <h2>Recent updates</h2>
     <ul class="changelog-list" id="changelogList">
+      <li>
+        <span class="date">20 Jul 2026</span>
+        <p class="entry-title">Send Announcement</p>
+        <p class="entry-body">Compose a message with an optional image and send it to everyone who has the active card saved, from the main view's active-card panel — mirrors Announcements.cs, including uploading the image to its fixed per-card blob path before the send call.</p>
+      </li>
       <li>
         <span class="date">20 Jul 2026</span>
         <p class="entry-title">Contacts &amp; QR-scan-to-add</p>
