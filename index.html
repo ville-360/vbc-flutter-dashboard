@@ -550,7 +550,7 @@
 
   <section class="stats">
     <div class="stat-card done">
-      <div class="num">7</div>
+      <div class="num">8</div>
       <div class="label">Completed</div>
     </div>
     <div class="stat-card partial">
@@ -558,11 +558,11 @@
       <div class="label">In progress</div>
     </div>
     <div class="stat-card planned">
-      <div class="num">15</div>
+      <div class="num">14</div>
       <div class="label">Planned</div>
     </div>
     <div class="stat-card overall">
-      <div class="num">34%</div>
+      <div class="num">38%</div>
       <div class="label">Overall complete</div>
     </div>
   </section>
@@ -570,10 +570,10 @@
   <section class="progress-panel">
     <div class="progress-panel-top">
       <h2>Overall progress</h2>
-      <span class="progress-pct">34%</span>
+      <span class="progress-pct">38%</span>
     </div>
     <div class="progress-track">
-      <div class="progress-fill" style="width: 34%;"></div>
+      <div class="progress-fill" style="width: 38%;"></div>
     </div>
     <div class="progress-caption">
       <span>25 tracked work items</span>
@@ -585,9 +585,9 @@
     <div class="panel">
       <h2><span class="dot"></span>Current status &amp; milestone</h2>
       <span class="milestone-tag">Current milestone</span>
-      <p><strong>2D card lifecycle is feature-complete:</strong> a user can sign up for a free trial, create a 2D card, edit it, set it active, share it (QR, message, email, WhatsApp/Telegram, native share sheet), view it full-screen, and manage their team under Users — all talking to the real production backend with unchanged request formats.</p>
+      <p><strong>2D card lifecycle plus contacts is feature-complete:</strong> a user can sign up for a free trial, create a 2D card, edit it, set it active, share it (QR, message, email, WhatsApp/Telegram, native share sheet), view it full-screen, manage their team under Users, and build a saved-contacts address book by scanning a contact's QR code — all talking to the real production backend with unchanged request formats.</p>
       <span class="milestone-tag next">Next milestone</span>
-      <p><strong>Saved Contacts &amp; Announcements.</strong> Bringing over Unity's separate "saved contacts" list (distinct from team/Users, includes QR-scan add and vCard export) and the announcement compose/receive flow rounds out the app's core day-to-day usage loop.</p>
+      <p><strong>Announcements &amp; notifications.</strong> The announcement compose/receive flow and push notifications are the last pieces of the app's core day-to-day usage loop still outstanding.</p>
     </div>
     <div class="panel">
       <h2><span class="dot" style="background: var(--risk);"></span>Risks &amp; blockers</h2>
@@ -684,14 +684,14 @@
     </div>
 
     <div class="area">
-      <h3>Team &amp; Contacts <span class="count">1 / 2 done</span></h3>
+      <h3>Team &amp; Contacts <span class="count">2 / 2 done</span></h3>
       <div class="feature-row" data-status="done">
         <div><div class="name">User / team management</div><div class="note">Add / edit / remove team members and their card contact info</div></div>
         <span class="pill done">Done</span>
       </div>
-      <div class="feature-row" data-status="planned">
-        <div><div class="name">Saved contacts</div><div class="note">List/view/delete, QR-scan add, vCard export — distinct from Users above</div></div>
-        <span class="pill planned">Planned</span>
+      <div class="feature-row" data-status="done">
+        <div><div class="name">Saved contacts</div><div class="note">List/search/view/delete + QR-scan add with vCard export — distinct from Users above</div></div>
+        <span class="pill done">Done</span>
       </div>
     </div>
 
@@ -740,6 +740,11 @@
   <section class="changelog">
     <h2>Recent updates</h2>
     <ul class="changelog-list" id="changelogList">
+      <li>
+        <span class="date">20 Jul 2026</span>
+        <p class="entry-title">Contacts &amp; QR-scan-to-add</p>
+        <p class="entry-body">A saved-contacts address book (list, search, view, delete) reachable from the main menu's Contacts button, populated by scanning a contact's QR code from the new Scan screen — resolves the card, saves it server-side, and hands a vCard to the OS share sheet, mirroring Unity's Contact.cs.</p>
+      </li>
       <li>
         <span class="date">20 Jul 2026</span>
         <p class="entry-title">Stakeholder dashboard moved to GitHub Pages</p>
