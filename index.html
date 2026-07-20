@@ -718,11 +718,11 @@
     <div class="area">
       <h3>Account &amp; Platform <span class="count">0 / 5 done</span></h3>
       <div class="feature-row" data-status="partial">
-        <div><div class="name">Settings / account menu</div><div class="note">My Cards, Users, Sign Out live; Store &amp; Delete Account still stubs</div></div>
+        <div><div class="name">Settings / account menu</div><div class="note">My Cards, Users, Store, Sign Out live; Delete Account still a stub</div></div>
         <span class="pill partial">In progress</span>
       </div>
       <div class="feature-row" data-status="partial">
-        <div><div class="name">In-app purchases / subscriptions</div><div class="note">New-signup purchase wired (iOS + simulated debug flow); Store/trial-conversion screen, Android and receipt verification still to come</div></div>
+        <div><div class="name">In-app purchases / subscriptions</div><div class="note">New-signup purchase and the Store trial-conversion screen (+ automatic paywall once a trial expires) both wired, iOS + simulated debug flow; Android and server-side receipt verification still to come</div></div>
         <span class="pill partial">In progress</span>
       </div>
       <div class="feature-row" data-status="planned">
@@ -744,6 +744,11 @@
   <section class="changelog">
     <h2>Recent updates</h2>
     <ul class="changelog-list" id="changelogList">
+      <li>
+        <span class="date">20 Jul 2026</span>
+        <p class="entry-title">Store screen: trial-to-paid conversion</p>
+        <p class="entry-body">The account menu's "Store" row now shows trial status and lets a trial user subscribe (vbc/subscribeaftertrialended), voluntarily any time or automatically once the trial clock actually runs out (a full-screen block, matching Unity's hard paywall). Live-verified end to end against the test backend, including the automatic session refresh after a successful purchase.</p>
+      </li>
       <li>
         <span class="date">20 Jul 2026</span>
         <p class="entry-title">Paid subscription purchase (signup)</p>
