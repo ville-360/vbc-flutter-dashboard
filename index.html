@@ -1,0 +1,800 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VBC Flutter Rewrite — Project Dashboard</title>
+<meta name="description" content="Live progress dashboard for the VBC Flutter rewrite.">
+<style>
+  :root {
+    --bg: #f5f6fa;
+    --surface: #ffffff;
+    --surface-2: #eef0f6;
+    --border: rgba(20, 24, 40, 0.10);
+    --text: #171a24;
+    --text-dim: #5b6178;
+    --text-faint: #8b90a3;
+    --accent: #4a5ee8;
+    --accent-2: #7c5cff;
+    --good: #0f9d63;
+    --good-bg: #e3f7ee;
+    --warn: #b17300;
+    --warn-bg: #fdf1dc;
+    --planned: #626a82;
+    --planned-bg: #eaecf3;
+    --risk: #c23838;
+    --risk-bg: #fbe9e9;
+    --shadow: 0 1px 2px rgba(20,24,40,0.04), 0 8px 24px rgba(20,24,40,0.06);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0b0e18;
+      --surface: #131826;
+      --surface-2: #1a2033;
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #eef1f8;
+      --text-dim: #a3aac2;
+      --text-faint: #6e7590;
+      --accent: #7c93ff;
+      --accent-2: #a48bff;
+      --good: #3ddc9a;
+      --good-bg: rgba(61, 220, 154, 0.12);
+      --warn: #f2b64b;
+      --warn-bg: rgba(242, 182, 75, 0.12);
+      --planned: #8890a8;
+      --planned-bg: rgba(136, 144, 168, 0.12);
+      --risk: #f37272;
+      --risk-bg: rgba(243, 114, 114, 0.12);
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0b0e18;
+    --surface: #131826;
+    --surface-2: #1a2033;
+    --border: rgba(255, 255, 255, 0.08);
+    --text: #eef1f8;
+    --text-dim: #a3aac2;
+    --text-faint: #6e7590;
+    --accent: #7c93ff;
+    --accent-2: #a48bff;
+    --good: #3ddc9a;
+    --good-bg: rgba(61, 220, 154, 0.12);
+    --warn: #f2b64b;
+    --warn-bg: rgba(242, 182, 75, 0.12);
+    --planned: #8890a8;
+    --planned-bg: rgba(136, 144, 168, 0.12);
+    --risk: #f37272;
+    --risk-bg: rgba(243, 114, 114, 0.12);
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+  }
+
+  :root[data-theme="light"] {
+    --bg: #f5f6fa;
+    --surface: #ffffff;
+    --surface-2: #eef0f6;
+    --border: rgba(20, 24, 40, 0.10);
+    --text: #171a24;
+    --text-dim: #5b6178;
+    --text-faint: #8b90a3;
+    --accent: #4a5ee8;
+    --accent-2: #7c5cff;
+    --good: #0f9d63;
+    --good-bg: #e3f7ee;
+    --warn: #b17300;
+    --warn-bg: #fdf1dc;
+    --planned: #626a82;
+    --planned-bg: #eaecf3;
+    --risk: #c23838;
+    --risk-bg: #fbe9e9;
+    --shadow: 0 1px 2px rgba(20,24,40,0.04), 0 8px 24px rgba(20,24,40,0.06);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* ---------- Header ---------- */
+
+  header.hero {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    padding-bottom: 28px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 0 0 8px;
+  }
+
+  h1 {
+    font-size: clamp(26px, 4vw, 34px);
+    font-weight: 800;
+    margin: 0 0 8px;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  .hero-sub {
+    color: var(--text-dim);
+    margin: 0;
+    max-width: 56ch;
+    font-size: 15px;
+  }
+
+  .hero-meta {
+    text-align: right;
+    font-size: 13px;
+    color: var(--text-faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .hero-meta strong {
+    display: block;
+    color: var(--text);
+    font-size: 13px;
+    margin-bottom: 2px;
+  }
+
+  /* ---------- Stat row ---------- */
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 18px 16px;
+    box-shadow: var(--shadow);
+  }
+
+  .stat-card .num {
+    font-size: 28px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+
+  .stat-card .label {
+    font-size: 12.5px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+
+  .stat-card.done .num { color: var(--good); }
+  .stat-card.partial .num { color: var(--warn); }
+  .stat-card.planned .num { color: var(--planned); }
+  .stat-card.overall .num { color: var(--accent); }
+
+  /* ---------- Progress panel ---------- */
+
+  .progress-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px 24px;
+    box-shadow: var(--shadow);
+    margin-bottom: 28px;
+  }
+
+  .progress-panel-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .progress-panel-top h2 {
+    font-size: 15px;
+    margin: 0;
+    font-weight: 700;
+  }
+
+  .progress-pct {
+    font-size: 22px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color: var(--accent);
+  }
+
+  .progress-track {
+    height: 12px;
+    border-radius: 999px;
+    background: var(--surface-2);
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--border);
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    transition: width 0.6s ease;
+  }
+
+  .progress-caption {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 12.5px;
+    color: var(--text-faint);
+  }
+
+  /* ---------- Status + milestone cards ---------- */
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 22px;
+    box-shadow: var(--shadow);
+  }
+
+  .panel h2 {
+    font-size: 14px;
+    margin: 0 0 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .panel h2 .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex: none;
+  }
+
+  .panel p {
+    margin: 0 0 10px;
+    font-size: 14px;
+    color: var(--text-dim);
+  }
+
+  .panel p:last-child { margin-bottom: 0; }
+
+  .milestone-tag {
+    display: inline-block;
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--good-bg);
+    color: var(--good);
+    margin-bottom: 10px;
+  }
+
+  .milestone-tag.next {
+    background: var(--planned-bg);
+    color: var(--planned);
+  }
+
+  .risk-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .risk-list li {
+    font-size: 13.5px;
+    color: var(--text-dim);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .risk-list li::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--risk);
+    margin-top: 6px;
+    flex: none;
+  }
+
+  /* ---------- Feature board ---------- */
+
+  .board-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 40px 0 16px;
+  }
+
+  .board-header h2 {
+    font-size: 19px;
+    margin: 0;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+
+  .filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .filter-chip {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-dim);
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 6px 13px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+
+  .filter-chip:hover { color: var(--text); }
+
+  .filter-chip.active {
+    background: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
+  }
+
+  .areas {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .area {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px 20px 6px;
+    box-shadow: var(--shadow);
+  }
+
+  .area h3 {
+    font-size: 13.5px;
+    font-weight: 700;
+    margin: 0 0 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .area h3 .count {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--text-faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .feature-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 11px 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .feature-row .name {
+    font-size: 13.5px;
+    font-weight: 600;
+  }
+
+  .feature-row .note {
+    font-size: 12px;
+    color: var(--text-faint);
+    margin-top: 2px;
+  }
+
+  .pill {
+    flex: none;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    padding: 3px 9px;
+    border-radius: 999px;
+    white-space: nowrap;
+    margin-top: 1px;
+  }
+
+  .pill.done { background: var(--good-bg); color: var(--good); }
+  .pill.partial { background: var(--warn-bg); color: var(--warn); }
+  .pill.planned { background: var(--planned-bg); color: var(--planned); }
+
+  .feature-row[data-status="done"] { display: flex; }
+  .area.hide-partial .feature-row[data-status="partial"],
+  .area.hide-planned .feature-row[data-status="planned"],
+  .area.hide-done .feature-row[data-status="done"] { display: none; }
+
+  /* ---------- Changelog ---------- */
+
+  .changelog {
+    margin-top: 40px;
+  }
+
+  .changelog h2 {
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin: 0 0 16px;
+  }
+
+  .changelog-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-left: 2px solid var(--border);
+  }
+
+  .changelog-list li {
+    position: relative;
+    padding: 2px 0 22px 22px;
+  }
+
+  .changelog-list li::before {
+    content: "";
+    position: absolute;
+    left: -6px;
+    top: 4px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--surface);
+  }
+
+  .changelog-list .date {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 3px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .changelog-list .entry-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0 0 3px;
+  }
+
+  .changelog-list .entry-body {
+    font-size: 13.5px;
+    color: var(--text-dim);
+    margin: 0;
+  }
+
+  footer {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 12.5px;
+    color: var(--text-faint);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  @media (max-width: 820px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .info-grid { grid-template-columns: 1fr; }
+    .areas { grid-template-columns: 1fr; }
+    .hero-meta { text-align: left; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div>
+      <p class="eyebrow">VBC · Project Dashboard</p>
+      <h1>Virtual Business Cards — Flutter Rewrite</h1>
+      <p class="hero-sub">Progress of the Flutter reimplementation of the production Unity app, tracked against the same backend and user experience.</p>
+    </div>
+    <div class="hero-meta">
+      <strong id="lastUpdated">Last updated 20 Jul 2026</strong>
+      Generated from the engineering task tracker
+    </div>
+  </header>
+
+  <section class="stats">
+    <div class="stat-card done">
+      <div class="num">7</div>
+      <div class="label">Completed</div>
+    </div>
+    <div class="stat-card partial">
+      <div class="num">3</div>
+      <div class="label">In progress</div>
+    </div>
+    <div class="stat-card planned">
+      <div class="num">15</div>
+      <div class="label">Planned</div>
+    </div>
+    <div class="stat-card overall">
+      <div class="num">34%</div>
+      <div class="label">Overall complete</div>
+    </div>
+  </section>
+
+  <section class="progress-panel">
+    <div class="progress-panel-top">
+      <h2>Overall progress</h2>
+      <span class="progress-pct">34%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" style="width: 34%;"></div>
+    </div>
+    <div class="progress-caption">
+      <span>25 tracked work items</span>
+      <span>Weighted: done = 100%, in progress = 50%</span>
+    </div>
+  </section>
+
+  <section class="info-grid">
+    <div class="panel">
+      <h2><span class="dot"></span>Current status &amp; milestone</h2>
+      <span class="milestone-tag">Current milestone</span>
+      <p><strong>2D card lifecycle is feature-complete:</strong> a user can sign up for a free trial, create a 2D card, edit it, set it active, share it (QR, message, email, WhatsApp/Telegram, native share sheet), view it full-screen, and manage their team under Users — all talking to the real production backend with unchanged request formats.</p>
+      <span class="milestone-tag next">Next milestone</span>
+      <p><strong>Saved Contacts &amp; Announcements.</strong> Bringing over Unity's separate "saved contacts" list (distinct from team/Users, includes QR-scan add and vCard export) and the announcement compose/receive flow rounds out the app's core day-to-day usage loop.</p>
+    </div>
+    <div class="panel">
+      <h2><span class="dot" style="background: var(--risk);"></span>Risks &amp; blockers</h2>
+      <ul class="risk-list">
+        <li>A handful of backend quirks (e.g. a blob-path mismatch in the card-layout-edit endpoint) are being faithfully reproduced rather than fixed, per plan — a dedicated backend clean-up pass is scheduled for after full UI parity, not before.</li>
+        <li>360° cards and Bluetooth P2P sharing need native plugin integration (panoramic viewer, BLE GATT protocol) — larger, riskier scope than the screens shipped so far.</li>
+        <li>In-app purchases require live Apple/Google store product configuration before that flow can be built end-to-end, not just app-side code.</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="board-header">
+    <h2>Feature board</h2>
+    <div class="filters" id="filters">
+      <button class="filter-chip active" data-filter="all">All</button>
+      <button class="filter-chip" data-filter="done">Completed</button>
+      <button class="filter-chip" data-filter="partial">In progress</button>
+      <button class="filter-chip" data-filter="planned">Planned</button>
+    </div>
+  </div>
+
+  <section class="areas" id="areas">
+
+    <div class="area">
+      <h3>Authentication &amp; Onboarding <span class="count">1 / 4 done</span></h3>
+      <div class="feature-row" data-status="done">
+        <div><div class="name">Login / logout</div><div class="note">Auto-login mirrors Unity's email-only re-auth</div></div>
+        <span class="pill done">Done</span>
+      </div>
+      <div class="feature-row" data-status="partial">
+        <div><div class="name">Sign-up — free trial</div><div class="note">Paid subscription tiers show "coming soon"</div></div>
+        <span class="pill partial">In progress</span>
+      </div>
+      <div class="feature-row" data-status="planned">
+        <div><div class="name">Password recovery</div></div>
+        <span class="pill planned">Planned</span>
+      </div>
+      <div class="feature-row" data-status="planned">
+        <div><div class="name">Account deletion</div></div>
+        <span class="pill planned">Planned</span>
+      </div>
+    </div>
+
+    <div class="area">
+      <h3>Card Creation &amp; Management <span class="count">3 / 5 done</span></h3>
+      <div class="feature-row" data-status="done">
+        <div><div class="name">2D card creation</div><div class="note">Contact select → style → media → content → submit</div></div>
+        <span class="pill done">Done</span>
+      </div>
+      <div class="feature-row" data-status="done">
+        <div><div class="name">Card editing</div><div class="note">Media, layout/colors/logo/audio, contact reassignment</div></div>
+        <span class="pill done">Done</span>
+      </div>
+      <div class="feature-row" data-status="done">
+        <div><div class="name">My Cards (set active / open / delete)</div></div>
+        <span class="pill done">Done</span>
+      </div>
+      <div class="feature-row" data-status="planned">
+        <div><div class="name">360° card creation</div><div class="note">Panoramic showroom, async character processing</div></div>
+        <span class="pill planned">Planned</span>
+      </div>
+      <div class="feature-row" data-status="planned">
+        <div><div class="name">Async processing status</div><div class="note">Card-tile progress polling</div></div>
+        <span class="pill planned">Planned</span>
+      </div>
+    </div>
+
+    <div class="area">
+      <h3>Card Viewing &amp; Sharing <span class="count">2 / 6 done</span></h3>
+      <div class="feature-row" data-status="done">
+        <div><div class="name">Full-screen card viewer (2D, own card)</div><div class="note">Media, audio, contact actions, vCard export</div></div>
+        <span class="pill done">Done</span>
+      </div>
+      <div class="feature-row" data-status="done">
+        <div><div class="name">Share screen</div><div class="note">QR, custom message, email, WhatsApp/Telegram, native share</div></div>
+        <span class="pill done">Done</span>
+      </div>
+      <div class="feature-row" data-status="partial">
+        <div><div class="name">Bluetooth P2P sharing</div><div class="note">UI shown as "Soon"; BLE functionality not wired yet</div></div>
+        <span class="pill partial">In progress</span>
+      </div>
+      <div class="feature-row" data-status="planned">
+        <div><div class="name">360° card viewer</div></div>
+        <span class="pill planned">Planned</span>
+      </div>
+      <div class="feature-row" data-status="planned">
+        <div><div class="name">Viewing others'/shared cards</div><div class="note">Contact-card &amp; deep-linked viewing</div></div>
+        <span class="pill planned">Planned</span>
+      </div>
+      <div class="feature-row" data-status="planned">
+        <div><div class="name">Widget &amp; deep-link sharing</div></div>
+        <span class="pill planned">Planned</span>
+      </div>
+    </div>
+
+    <div class="area">
+      <h3>Team &amp; Contacts <span class="count">1 / 2 done</span></h3>
+      <div class="feature-row" data-status="done">
+        <div><div class="name">User / team management</div><div class="note">Add / edit / remove team members and their card contact info</div></div>
+        <span class="pill done">Done</span>
+      </div>
+      <div class="feature-row" data-status="planned">
+        <div><div class="name">Saved contacts</div><div class="note">List/view/delete, QR-scan add, vCard export — distinct from Users above</div></div>
+        <span class="pill planned">Planned</span>
+      </div>
+    </div>
+
+    <div class="area">
+      <h3>Engagement <span class="count">0 / 3 done</span></h3>
+      <div class="feature-row" data-status="planned">
+        <div><div class="name">Announcements (send / receive)</div></div>
+        <span class="pill planned">Planned</span>
+      </div>
+      <div class="feature-row" data-status="planned">
+        <div><div class="name">Push notifications</div></div>
+        <span class="pill planned">Planned</span>
+      </div>
+      <div class="feature-row" data-status="planned">
+        <div><div class="name">Tutorials / onboarding walkthroughs</div></div>
+        <span class="pill planned">Planned</span>
+      </div>
+    </div>
+
+    <div class="area">
+      <h3>Account &amp; Platform <span class="count">0 / 5 done</span></h3>
+      <div class="feature-row" data-status="partial">
+        <div><div class="name">Settings / account menu</div><div class="note">My Cards, Users, Sign Out live; Store &amp; Delete Account still stubs</div></div>
+        <span class="pill partial">In progress</span>
+      </div>
+      <div class="feature-row" data-status="planned">
+        <div><div class="name">In-app purchases / subscriptions</div></div>
+        <span class="pill planned">Planned</span>
+      </div>
+      <div class="feature-row" data-status="planned">
+        <div><div class="name">Home-screen widgets</div></div>
+        <span class="pill planned">Planned</span>
+      </div>
+      <div class="feature-row" data-status="planned">
+        <div><div class="name">HEIC image conversion</div></div>
+        <span class="pill planned">Planned</span>
+      </div>
+      <div class="feature-row" data-status="planned">
+        <div><div class="name">Dev/QA server switch panel</div></div>
+        <span class="pill planned">Planned</span>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="changelog">
+    <h2>Recent updates</h2>
+    <ul class="changelog-list" id="changelogList">
+      <li>
+        <span class="date">20 Jul 2026</span>
+        <p class="entry-title">Stakeholder dashboard moved to GitHub Pages</p>
+        <p class="entry-body">Replaced the previous Claude Artifact roadmap with this self-contained dashboard at <code>docs/index.html</code>, published from this repository so it stays in sync with the code that's actually merged.</p>
+      </li>
+      <li>
+        <span class="date">20 Jul 2026</span>
+        <p class="entry-title">User / team management</p>
+        <p class="entry-body">Add, edit and remove team members from the account menu, including card-owner cascades and protection for the tenant's own account.</p>
+      </li>
+      <li>
+        <span class="date">20 Jul 2026</span>
+        <p class="entry-title">Full-screen card viewer</p>
+        <p class="entry-body">Own-card viewer reachable from the main menu's View action: media/audio playback, contact quick-actions, vCard export via the native share sheet.</p>
+      </li>
+      <li>
+        <span class="date">20 Jul 2026</span>
+        <p class="entry-title">My Cards: Edit, Set Active, Open, Delete</p>
+        <p class="entry-body">Full card-edit flow (media, layout, contact reassignment) plus set-active, open and delete, matching Unity's card list behaviour.</p>
+      </li>
+      <li>
+        <span class="date">20 Jul 2026</span>
+        <p class="entry-title">Share screen</p>
+        <p class="entry-body">QR code, editable custom message, email, WhatsApp/Telegram and native share, opened with a circular-reveal transition from the home screen's share button. Bluetooth shown as UI-only for now.</p>
+      </li>
+    </ul>
+  </section>
+
+  <footer>
+    <span>vbc_flutter — replacement for the production VBC Unity app</span>
+    <span>Dashboard source: <code>docs/index.html</code></span>
+  </footer>
+
+</div>
+
+<script>
+  var filters = document.getElementById('filters');
+  var areas = document.querySelectorAll('.area');
+
+  filters.addEventListener('click', function (e) {
+    var btn = e.target.closest('.filter-chip');
+    if (!btn) return;
+
+    filters.querySelectorAll('.filter-chip').forEach(function (c) { c.classList.remove('active'); });
+    btn.classList.add('active');
+
+    var filter = btn.getAttribute('data-filter');
+    areas.forEach(function (area) {
+      area.classList.remove('hide-done', 'hide-partial', 'hide-planned');
+      if (filter === 'done') area.classList.add('hide-partial', 'hide-planned');
+      if (filter === 'partial') area.classList.add('hide-done', 'hide-planned');
+      if (filter === 'planned') area.classList.add('hide-done', 'hide-partial');
+    });
+  });
+</script>
+
+</body>
+</html>
