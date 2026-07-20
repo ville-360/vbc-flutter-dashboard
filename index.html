@@ -554,15 +554,15 @@
       <div class="label">Completed</div>
     </div>
     <div class="stat-card partial">
-      <div class="num">3</div>
+      <div class="num">4</div>
       <div class="label">In progress</div>
     </div>
     <div class="stat-card planned">
-      <div class="num">14</div>
+      <div class="num">13</div>
       <div class="label">Planned</div>
     </div>
     <div class="stat-card overall">
-      <div class="num">40%</div>
+      <div class="num">42%</div>
       <div class="label">Overall complete</div>
     </div>
   </section>
@@ -570,10 +570,10 @@
   <section class="progress-panel">
     <div class="progress-panel-top">
       <h2>Overall progress</h2>
-      <span class="progress-pct">40%</span>
+      <span class="progress-pct">42%</span>
     </div>
     <div class="progress-track">
-      <div class="progress-fill" style="width: 40%;"></div>
+      <div class="progress-fill" style="width: 42%;"></div>
     </div>
     <div class="progress-caption">
       <span>26 tracked work items</span>
@@ -594,7 +594,7 @@
       <ul class="risk-list">
         <li>A handful of backend quirks (e.g. a blob-path mismatch in the card-layout-edit endpoint) are being faithfully reproduced rather than fixed, per plan — a dedicated backend clean-up pass is scheduled for after full UI parity, not before.</li>
         <li>360° cards and Bluetooth P2P sharing need native plugin integration (panoramic viewer, BLE GATT protocol) — larger, riskier scope than the screens shipped so far.</li>
-        <li>In-app purchases require live Apple/Google store product configuration before that flow can be built end-to-end, not just app-side code.</li>
+        <li>The paid-subscription purchase flow is built and live-verified, but real iOS purchases still need an actual App Store Connect product catalog configured before they'll work outside the simulated debug flow; Android (Play Billing) and server-side receipt verification are deliberately deferred (see ADR 0001).</li>
       </ul>
     </div>
   </section>
@@ -721,9 +721,9 @@
         <div><div class="name">Settings / account menu</div><div class="note">My Cards, Users, Sign Out live; Store &amp; Delete Account still stubs</div></div>
         <span class="pill partial">In progress</span>
       </div>
-      <div class="feature-row" data-status="planned">
-        <div><div class="name">In-app purchases / subscriptions</div></div>
-        <span class="pill planned">Planned</span>
+      <div class="feature-row" data-status="partial">
+        <div><div class="name">In-app purchases / subscriptions</div><div class="note">New-signup purchase wired (iOS + simulated debug flow); Store/trial-conversion screen, Android and receipt verification still to come</div></div>
+        <span class="pill partial">In progress</span>
       </div>
       <div class="feature-row" data-status="planned">
         <div><div class="name">Home-screen widgets</div></div>
@@ -744,6 +744,11 @@
   <section class="changelog">
     <h2>Recent updates</h2>
     <ul class="changelog-list" id="changelogList">
+      <li>
+        <span class="date">20 Jul 2026</span>
+        <p class="entry-title">Paid subscription purchase (signup)</p>
+        <p class="entry-body">Wired the sign-up plan screen's "Subscribe" button to a real purchase flow — StoreKit on iOS, a simulated purchase everywhere else (web has no in-app-purchase mechanism at all) — hitting the same vbc/createtenantfromapp call either way. Live-verified end to end against the test backend. Android and server-side receipt verification are deliberately deferred; see ADR 0001.</p>
+      </li>
       <li>
         <span class="date">20 Jul 2026</span>
         <p class="entry-title">Send Announcement</p>
