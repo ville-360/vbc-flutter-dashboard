@@ -550,19 +550,19 @@
 
   <section class="stats">
     <div class="stat-card done">
-      <div class="num">12</div>
+      <div class="num">14</div>
       <div class="label">Completed</div>
     </div>
     <div class="stat-card partial">
-      <div class="num">4</div>
+      <div class="num">3</div>
       <div class="label">In progress</div>
     </div>
     <div class="stat-card planned">
-      <div class="num">10</div>
+      <div class="num">9</div>
       <div class="label">Planned</div>
     </div>
     <div class="stat-card overall">
-      <div class="num">54%</div>
+      <div class="num">60%</div>
       <div class="label">Overall complete</div>
     </div>
   </section>
@@ -570,10 +570,10 @@
   <section class="progress-panel">
     <div class="progress-panel-top">
       <h2>Overall progress</h2>
-      <span class="progress-pct">54%</span>
+      <span class="progress-pct">60%</span>
     </div>
     <div class="progress-track">
-      <div class="progress-fill" style="width: 54%;"></div>
+      <div class="progress-fill" style="width: 60%;"></div>
     </div>
     <div class="progress-caption">
       <span>26 tracked work items</span>
@@ -585,9 +585,9 @@
     <div class="panel">
       <h2><span class="dot"></span>Current status &amp; milestone</h2>
       <span class="milestone-tag">Current milestone</span>
-      <p><strong>The core day-to-day usage loop is feature-complete:</strong> a user can sign up for a free trial, create a 2D card, edit it, set it active, share it (QR, message, email, WhatsApp/Telegram, native share sheet), view it full-screen, manage their team under Users, build a saved-contacts address book by scanning a QR code, send a push-notification announcement to everyone who has their card, receive one back too (a session-bootstrap banner plus a full screen reached by tapping the push), and — as of this update — permanently delete their account, all talking to the real production backend with unchanged request formats.</p>
+      <p><strong>The core day-to-day usage loop is feature-complete:</strong> a user can sign up for a free trial, create a 2D card, edit it, set it active, share it (QR, message, email, WhatsApp/Telegram, native share sheet), view it full-screen, manage their team under Users, build a saved-contacts address book by scanning a QR code, send a push-notification announcement to everyone who has their card, receive one back too (a session-bootstrap banner plus a full screen reached by tapping the push), permanently delete their account, and — as of this update — recover a forgotten password, all talking to the real production backend with unchanged request formats. Authentication &amp; Onboarding is now fully done.</p>
       <span class="milestone-tag next">Next milestone</span>
-      <p><strong>Not yet decided.</strong> Remaining candidates: 360° cards, Bluetooth P2P sharing, Unity's separate already-paid-tenant Store surface, forgot-password, and Tutorials/onboarding — see the Planned rows below.</p>
+      <p><strong>Not yet decided.</strong> Remaining candidates: 360° cards, Bluetooth P2P sharing, Unity's separate already-paid-tenant Store surface, and Tutorials/onboarding — see the Planned rows below.</p>
     </div>
     <div class="panel">
       <h2><span class="dot" style="background: var(--risk);"></span>Risks &amp; blockers</h2>
@@ -595,7 +595,7 @@
         <li>A handful of backend quirks (e.g. a blob-path mismatch in the card-layout-edit endpoint) are being faithfully reproduced rather than fixed, per plan — a dedicated backend clean-up pass is scheduled for after full UI parity, not before.</li>
         <li>360° cards and Bluetooth P2P sharing need native plugin integration (panoramic viewer, BLE GATT protocol) — larger, riskier scope than the screens shipped so far.</li>
         <li>The paid-subscription purchase flow (both iOS StoreKit and Android Play Billing) is wired for release builds, but neither store has a real product catalog configured yet (App Store Connect / Play Console), so real purchases still fall through to the simulated debug flow in practice until that catalog work happens; server-side receipt verification stays deliberately deferred (see ADR 0001).</li>
-        <li>Push notifications are fully wired (OneSignal init, permission request, click routing, session identity linking) and unit/widget-tested, but real delivery hasn't been verified on a device — Android needs an FCM sender configured in the OneSignal dashboard, iOS needs the Push Notifications capability + an APNs key, neither of which this session had console access to do (see ADR 0002). Both platforms also still ship under the Flutter template's placeholder application id, same pre-existing gap ADR 0001 already flagged for Play Billing.</li>
+        <li>Push notifications are fully wired (OneSignal init, permission request, click routing, session identity linking) and unit/widget-tested — the receiving UI (banner + full screen) is done — but real delivery hasn't been verified on a device. Android's POST_NOTIFICATIONS permission and iOS's UIBackgroundModes are now declared, but an FCM sender and an APNs key still need to be configured in the Firebase/OneSignal/Xcode consoles, none of which any session so far has had access to (see ADR 0002). This is the same underlying gap ADR 0001 flags for Play Billing/StoreKit: all four are blocked on replacing the placeholder `com.example.vbc_flutter` application id with a real one and standing up the matching console projects/listings.</li>
       </ul>
     </div>
   </section>
@@ -613,7 +613,7 @@
   <section class="areas" id="areas">
 
     <div class="area">
-      <h3>Authentication &amp; Onboarding <span class="count">3 / 4 done</span></h3>
+      <h3>Authentication &amp; Onboarding <span class="count">4 / 4 done</span></h3>
       <div class="feature-row" data-status="done">
         <div><div class="name">Login / logout</div><div class="note">Auto-login mirrors Unity's email-only re-auth</div></div>
         <span class="pill done">Done</span>
@@ -622,9 +622,9 @@
         <div><div class="name">Sign-up — free trial &amp; paid tiers</div><div class="note">Account info, availability check, free trial, and real iOS/Android purchases (release builds) all wired; only real store product catalogs (App Store Connect / Play Console) are still unconfigured — see ADR 0001</div></div>
         <span class="pill done">Done</span>
       </div>
-      <div class="feature-row" data-status="planned">
-        <div><div class="name">Password recovery</div></div>
-        <span class="pill planned">Planned</span>
+      <div class="feature-row" data-status="done">
+        <div><div class="name">Password recovery</div><div class="note">Email → vbc/auth/forgot-password → success view; mirrors Unity's RestorePassword.cs, including its "always shows success" quirk regardless of backend response</div></div>
+        <span class="pill done">Done</span>
       </div>
       <div class="feature-row" data-status="done">
         <div><div class="name">Account deletion</div><div class="note">Type-DELETE confirm mirrors Unity's two-step flow; reached from the account menu</div></div>
@@ -697,17 +697,17 @@
     </div>
 
     <div class="area">
-      <h3>Engagement <span class="count">1 / 4 done</span></h3>
+      <h3>Engagement <span class="count">2 / 4 done</span></h3>
       <div class="feature-row" data-status="done">
         <div><div class="name">Send announcement</div><div class="note">Message + optional image, from the main view's active-card panel</div></div>
         <span class="pill done">Done</span>
       </div>
-      <div class="feature-row" data-status="partial">
-        <div><div class="name">Receive announcements</div><div class="note">Both surfaces built: a session-bootstrap banner on Home, and a full screen reached by tapping the push itself (message, sender, image, "Open sender's card")</div></div>
-        <span class="pill partial">In progress</span>
+      <div class="feature-row" data-status="done">
+        <div><div class="name">Receive announcements</div><div class="note">Both surfaces built and tested: a session-bootstrap banner on Home, and a full screen reached by tapping the push itself (message, sender, image, "Open sender's card"). Depends on the Push notifications transport below for real delivery</div></div>
+        <span class="pill done">Done</span>
       </div>
       <div class="feature-row" data-status="partial">
-        <div><div class="name">Push notifications</div><div class="note">OneSignal wired (init, permission request, click routing, session identity linking) and tested; real delivery needs Android/iOS console setup this session couldn't do — see ADR 0002</div></div>
+        <div><div class="name">Push notifications</div><div class="note">OneSignal wired (init, permission request, click routing, session identity linking) and tested; Android POST_NOTIFICATIONS permission and iOS UIBackgroundModes now declared, but real delivery still needs an FCM sender + APNs key configured in Firebase/OneSignal/Xcode consoles — see ADR 0002</div></div>
         <span class="pill partial">In progress</span>
       </div>
       <div class="feature-row" data-status="planned">
@@ -745,6 +745,11 @@
   <section class="changelog">
     <h2>Recent updates</h2>
     <ul class="changelog-list" id="changelogList">
+      <li>
+        <span class="date">21 Jul 2026</span>
+        <p class="entry-title">Password recovery; closed out Receive announcements</p>
+        <p class="entry-body">Password recovery: "Forgot password?" on the login screen (previously a dummy) now opens a dedicated screen — email → `vbc/auth/forgot-password` → success view, mirroring `RestorePassword.cs` including its real quirk of showing success unconditionally regardless of the backend's response (live-verified: the test backend actually 404s on this endpoint today, and the UI still shows success, exactly like Unity would). Authentication &amp; Onboarding is now fully done. Separately, investigated why "Receive announcements" was still marked in-progress: its own UI (Home banner + full received-announcement screen, message/sender/image/"Open sender's card") was already code-complete and fully tested — the only gap was that end-to-end push delivery had never been verified on a real device, which is a "Push notifications" transport concern, not a gap in this screen. Split the two apart: Receive announcements is now Done; Push notifications stays In progress. Made the two safe, console-independent improvements possible without Xcode/Firebase access — Android now declares `POST_NOTIFICATIONS` (required on API 33+ for the permission prompt to fire), iOS's Info.plist now declares `UIBackgroundModes: remote-notification` — and documented exactly what's left in ADR 0002 (an FCM sender + APNs key configured in the Firebase/OneSignal/Xcode consoles, gated on the same placeholder-application-id issue ADR 0001 already flagged for IAP). 8 new tests (forgot-password controller and screen, plus two router-redirect cases) — full suite is 233 tests, all passing.</p>
+      </li>
       <li>
         <span class="date">21 Jul 2026</span>
         <p class="entry-title">Account deletion</p>
