@@ -594,7 +594,7 @@
       <ul class="risk-list">
         <li>A handful of backend quirks (e.g. a blob-path mismatch in the card-layout-edit endpoint) are being faithfully reproduced rather than fixed, per plan — a dedicated backend clean-up pass is scheduled for after full UI parity, not before.</li>
         <li>360° cards and Bluetooth P2P sharing need native plugin integration (panoramic viewer, BLE GATT protocol) — larger, riskier scope than the screens shipped so far.</li>
-        <li>The paid-subscription purchase flow is built and live-verified, but real iOS purchases still need an actual App Store Connect product catalog configured before they'll work outside the simulated debug flow; Android (Play Billing) and server-side receipt verification are deliberately deferred (see ADR 0001).</li>
+        <li>The paid-subscription purchase flow (both iOS StoreKit and Android Play Billing) is wired for release builds, but neither store has a real product catalog configured yet (App Store Connect / Play Console), so real purchases still fall through to the simulated debug flow in practice until that catalog work happens; server-side receipt verification stays deliberately deferred (see ADR 0001).</li>
       </ul>
     </div>
   </section>
@@ -722,7 +722,7 @@
         <span class="pill partial">In progress</span>
       </div>
       <div class="feature-row" data-status="partial">
-        <div><div class="name">In-app purchases / subscriptions</div><div class="note">New-signup purchase and the Store trial-conversion screen (+ automatic paywall once a trial expires) both wired, iOS + simulated debug flow; Android and server-side receipt verification still to come</div></div>
+        <div><div class="name">In-app purchases / subscriptions</div><div class="note">New-signup purchase and the Store trial-conversion screen (+ automatic paywall once a trial expires) both wired for iOS StoreKit and Android Play Billing (release builds; debug/profile stay on the simulated flow); server-side receipt verification still to come</div></div>
         <span class="pill partial">In progress</span>
       </div>
       <div class="feature-row" data-status="planned">
@@ -744,6 +744,11 @@
   <section class="changelog">
     <h2>Recent updates</h2>
     <ul class="changelog-list" id="changelogList">
+      <li>
+        <span class="date">21 Jul 2026</span>
+        <p class="entry-title">Real Android IAP (Play Billing) for paid signup</p>
+        <p class="entry-body">Extended the Subscribe purchase flow (signup plan screen + Store trial-conversion) to real Google Play Billing in Android release builds, alongside iOS StoreKit — both now go through the same RealIapService, since package:in_app_purchase abstracts the two stores identically; no store-specific code was needed. Android debug/profile builds keep the simulated flow, since Play Billing has no fully-local test path the way StoreKit Testing does. Matches Unity's IAPManager precedent of not sending a receipt to the backend at signup time on either platform. ADR 0001 updated to reflect Android is no longer deferred; real purchases on either store still need their respective consoles' product catalogs configured (and the app's still-placeholder applicationId fixed) before they'll actually work outside the debug flow.</p>
+      </li>
       <li>
         <span class="date">20 Jul 2026</span>
         <p class="entry-title">Store screen: trial-to-paid conversion</p>
