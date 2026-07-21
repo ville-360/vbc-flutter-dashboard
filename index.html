@@ -383,6 +383,45 @@
     border-color: var(--text);
   }
 
+  .board-tabs {
+    display: flex;
+    gap: 8px;
+    margin: 0 0 16px;
+  }
+
+  .board-tab {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-dim);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 8px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+
+  .board-tab:hover { color: var(--text); }
+
+  .board-tab.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
+  .backlog-note {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-faint);
+    margin: 0 0 18px;
+    padding: 10px 14px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+
   .areas {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -550,7 +589,7 @@
 
   <section class="stats">
     <div class="stat-card done">
-      <div class="num">14</div>
+      <div class="num">15</div>
       <div class="label">Completed</div>
     </div>
     <div class="stat-card partial">
@@ -558,11 +597,11 @@
       <div class="label">In progress</div>
     </div>
     <div class="stat-card planned">
-      <div class="num">9</div>
+      <div class="num">6</div>
       <div class="label">Planned</div>
     </div>
     <div class="stat-card overall">
-      <div class="num">60%</div>
+      <div class="num">69%</div>
       <div class="label">Overall complete</div>
     </div>
   </section>
@@ -570,13 +609,13 @@
   <section class="progress-panel">
     <div class="progress-panel-top">
       <h2>Overall progress</h2>
-      <span class="progress-pct">60%</span>
+      <span class="progress-pct">69%</span>
     </div>
     <div class="progress-track">
-      <div class="progress-fill" style="width: 60%;"></div>
+      <div class="progress-fill" style="width: 69%;"></div>
     </div>
     <div class="progress-caption">
-      <span>26 tracked work items</span>
+      <span>24 tracked work items (excludes Backlog — see the Backlog tab below)</span>
       <span>Weighted: done = 100%, in progress = 50%</span>
     </div>
   </section>
@@ -585,15 +624,15 @@
     <div class="panel">
       <h2><span class="dot"></span>Current status &amp; milestone</h2>
       <span class="milestone-tag">Current milestone</span>
-      <p><strong>The core day-to-day usage loop is feature-complete:</strong> a user can sign up for a free trial, create a 2D card, edit it, set it active, share it (QR, message, email, WhatsApp/Telegram, native share sheet), view it full-screen, manage their team under Users, build a saved-contacts address book by scanning a QR code, send a push-notification announcement to everyone who has their card, receive one back too (a session-bootstrap banner plus a full screen reached by tapping the push), permanently delete their account, and — as of this update — recover a forgotten password, all talking to the real production backend with unchanged request formats. Authentication &amp; Onboarding is now fully done.</p>
+      <p><strong>The core day-to-day usage loop is feature-complete:</strong> a user can sign up for a free trial, create a 2D card, edit it (with live upload/processing progress on the tile — as of this update), set it active, share it (QR, message, email, WhatsApp/Telegram, native share sheet), view it full-screen, manage their team under Users, build a saved-contacts address book by scanning a QR code, send a push-notification announcement to everyone who has their card, receive one back too (a session-bootstrap banner plus a full screen reached by tapping the push), permanently delete their account, and recover a forgotten password, all talking to the real production backend with unchanged request formats. Authentication &amp; Onboarding and Card Creation &amp; Management are now both fully done.</p>
       <span class="milestone-tag next">Next milestone</span>
-      <p><strong>Not yet decided.</strong> Remaining candidates: 360° cards, Bluetooth P2P sharing, Unity's separate already-paid-tenant Store surface, and Tutorials/onboarding — see the Planned rows below.</p>
+      <p><strong>Not yet decided.</strong> Remaining candidates: Bluetooth P2P sharing, Unity's separate already-paid-tenant Store surface, and Tutorials/onboarding — see the Planned rows below. 360° cards have been moved to the <strong>Backlog</strong> tab and aren't part of the near-term roadmap.</p>
     </div>
     <div class="panel">
       <h2><span class="dot" style="background: var(--risk);"></span>Risks &amp; blockers</h2>
       <ul class="risk-list">
         <li>A handful of backend quirks (e.g. a blob-path mismatch in the card-layout-edit endpoint) are being faithfully reproduced rather than fixed, per plan — a dedicated backend clean-up pass is scheduled for after full UI parity, not before.</li>
-        <li>360° cards and Bluetooth P2P sharing need native plugin integration (panoramic viewer, BLE GATT protocol) — larger, riskier scope than the screens shipped so far.</li>
+        <li>Bluetooth P2P sharing needs native plugin integration (BLE GATT protocol) — larger, riskier scope than the screens shipped so far. 360° cards would need similar native-plugin work (a panoramic viewer) but have been deprioritized to the Backlog tab.</li>
         <li>The paid-subscription purchase flow (both iOS StoreKit and Android Play Billing) is wired for release builds, but neither store has a real product catalog configured yet (App Store Connect / Play Console), so real purchases still fall through to the simulated debug flow in practice until that catalog work happens; server-side receipt verification stays deliberately deferred (see ADR 0001).</li>
         <li>Push notifications are fully wired (OneSignal init, permission request, click routing, session identity linking) and unit/widget-tested — the receiving UI (banner + full screen) is done — but real delivery hasn't been verified on a device. Android's POST_NOTIFICATIONS permission and iOS's UIBackgroundModes are now declared, but an FCM sender and an APNs key still need to be configured in the Firebase/OneSignal/Xcode consoles, none of which any session so far has had access to (see ADR 0002). This is the same underlying gap ADR 0001 flags for Play Billing/StoreKit: all four are blocked on replacing the placeholder `com.example.vbc_flutter` application id with a real one and standing up the matching console projects/listings.</li>
       </ul>
@@ -610,6 +649,12 @@
     </div>
   </div>
 
+  <div class="board-tabs" id="boardTabs">
+    <button class="board-tab active" data-tab="roadmap">Roadmap</button>
+    <button class="board-tab" data-tab="backlog">Backlog</button>
+  </div>
+
+  <div id="roadmapView">
   <section class="areas" id="areas">
 
     <div class="area">
@@ -633,7 +678,7 @@
     </div>
 
     <div class="area">
-      <h3>Card Creation &amp; Management <span class="count">3 / 5 done</span></h3>
+      <h3>Card Creation &amp; Management <span class="count">4 / 4 done</span></h3>
       <div class="feature-row" data-status="done">
         <div><div class="name">2D card creation</div><div class="note">Contact select → style → media → content → submit</div></div>
         <span class="pill done">Done</span>
@@ -646,18 +691,14 @@
         <div><div class="name">My Cards (set active / open / delete)</div></div>
         <span class="pill done">Done</span>
       </div>
-      <div class="feature-row" data-status="planned">
-        <div><div class="name">360° card creation</div><div class="note">Panoramic showroom, async character processing</div></div>
-        <span class="pill planned">Planned</span>
-      </div>
-      <div class="feature-row" data-status="planned">
-        <div><div class="name">Async processing status</div><div class="note">Card-tile progress polling</div></div>
-        <span class="pill planned">Planned</span>
+      <div class="feature-row" data-status="done">
+        <div><div class="name">Async processing status</div><div class="note">My Cards tile live-polls the video-transcoding worker ("Uploading"/"Processing X%"/"Done"), mirroring StatusChecker.cs; resumes correctly whether the video was just uploaded or is a leftover in-progress job from a previous session</div></div>
+        <span class="pill done">Done</span>
       </div>
     </div>
 
     <div class="area">
-      <h3>Card Viewing &amp; Sharing <span class="count">2 / 6 done</span></h3>
+      <h3>Card Viewing &amp; Sharing <span class="count">2 / 5 done</span></h3>
       <div class="feature-row" data-status="done">
         <div><div class="name">Full-screen card viewer (2D, own card)</div><div class="note">Media, audio, contact actions, vCard export</div></div>
         <span class="pill done">Done</span>
@@ -669,10 +710,6 @@
       <div class="feature-row" data-status="partial">
         <div><div class="name">Bluetooth P2P sharing</div><div class="note">UI shown as "Soon"; BLE functionality not wired yet</div></div>
         <span class="pill partial">In progress</span>
-      </div>
-      <div class="feature-row" data-status="planned">
-        <div><div class="name">360° card viewer</div></div>
-        <span class="pill planned">Planned</span>
       </div>
       <div class="feature-row" data-status="planned">
         <div><div class="name">Viewing others'/shared cards</div><div class="note">Contact-card &amp; deep-linked viewing</div></div>
@@ -741,10 +778,31 @@
     </div>
 
   </section>
+  </div>
+
+  <div id="backlogView" style="display: none;">
+    <p class="backlog-note">Backlog items are tracked here for visibility but deliberately excluded from the stat cards and "Overall complete" above — the roadmap can reach 100% while backlog items remain untouched.</p>
+    <section class="areas" id="backlogAreas">
+
+      <div class="area">
+        <h3>360° Cards <span class="count">0 / 1 done</span></h3>
+        <div class="feature-row" data-status="planned">
+          <div><div class="name">360° card creation, editing &amp; viewing</div><div class="note">Panoramic showroom: custom/stock background upload (client-resized to 3 resolutions), async character processing (Unscreen-style background removal, polled via vbc/checkcharacterstatus — a separate mechanism from the 2D video-worker polling used by Async processing status), and the CameraMovement/FovAdjust sphere viewer. Moved to Backlog — not part of the near-term roadmap</div></div>
+          <span class="pill planned">Planned</span>
+        </div>
+      </div>
+
+    </section>
+  </div>
 
   <section class="changelog">
     <h2>Recent updates</h2>
     <ul class="changelog-list" id="changelogList">
+      <li>
+        <span class="date">21 Jul 2026</span>
+        <p class="entry-title">Async processing status; added a Backlog tab, moved 360° cards into it</p>
+        <p class="entry-body">My Cards tiles now live-poll the video-transcoding worker for any card whose main video is still uploading/processing, mirroring StatusChecker.cs: "Uploading" → "Processing X%" → "Done", resuming correctly whether the video was just submitted in this session or is a leftover in-progress job resumed from a previous one (Unity's two separate trigger paths — CreateCard.cs's immediate post-upload kickoff and VBC_Handler.GetCards()'s processed=="false" resume-scan — are unified into one consistent per-tile rule here). A small, disclosed improvement over Unity: once a video finishes, the card is patched locally with its real video URL immediately, rather than staying stale until the next full login. Card Creation &amp; Management is now fully done. Separately, added a <strong>Backlog</strong> tab to the feature board, deliberately excluded from the stat cards and "Overall complete" percentage (now weighted only over the 24 roadmap items, not backlog ones) — moved 360° card creation/editing/viewing there as its first entry, consolidated into one row rather than the two separate "planned" rows it was split across before. 7 new tests (the polling provider's first-poll/done/retry-on-failure behavior, and a My Cards tile test exercising the full processing → done → local-patch flow) — full suite is 237 tests, all passing.</p>
+      </li>
       <li>
         <span class="date">21 Jul 2026</span>
         <p class="entry-title">Password recovery; closed out Receive announcements</p>
@@ -827,7 +885,9 @@
 
 <script>
   var filters = document.getElementById('filters');
-  var areas = document.querySelectorAll('.area');
+  // Scoped to the Roadmap tab's areas only -- Backlog has its own area(s)
+  // (#backlogAreas) that these status filters shouldn't touch.
+  var areas = document.querySelectorAll('#areas .area');
 
   filters.addEventListener('click', function (e) {
     var btn = e.target.closest('.filter-chip');
@@ -843,6 +903,24 @@
       if (filter === 'partial') area.classList.add('hide-done', 'hide-planned');
       if (filter === 'planned') area.classList.add('hide-done', 'hide-partial');
     });
+  });
+
+  var boardTabs = document.getElementById('boardTabs');
+  var roadmapView = document.getElementById('roadmapView');
+  var backlogView = document.getElementById('backlogView');
+
+  boardTabs.addEventListener('click', function (e) {
+    var btn = e.target.closest('.board-tab');
+    if (!btn) return;
+
+    boardTabs.querySelectorAll('.board-tab').forEach(function (c) { c.classList.remove('active'); });
+    btn.classList.add('active');
+
+    var tab = btn.getAttribute('data-tab');
+    var isBacklog = tab === 'backlog';
+    roadmapView.style.display = isBacklog ? 'none' : '';
+    backlogView.style.display = isBacklog ? '' : 'none';
+    filters.style.display = isBacklog ? 'none' : '';
   });
 </script>
 
