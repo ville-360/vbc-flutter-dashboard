@@ -554,15 +554,15 @@
       <div class="label">Completed</div>
     </div>
     <div class="stat-card partial">
-      <div class="num">4</div>
+      <div class="num">6</div>
       <div class="label">In progress</div>
     </div>
     <div class="stat-card planned">
-      <div class="num">13</div>
+      <div class="num">11</div>
       <div class="label">Planned</div>
     </div>
     <div class="stat-card overall">
-      <div class="num">42%</div>
+      <div class="num">46%</div>
       <div class="label">Overall complete</div>
     </div>
   </section>
@@ -570,10 +570,10 @@
   <section class="progress-panel">
     <div class="progress-panel-top">
       <h2>Overall progress</h2>
-      <span class="progress-pct">42%</span>
+      <span class="progress-pct">46%</span>
     </div>
     <div class="progress-track">
-      <div class="progress-fill" style="width: 42%;"></div>
+      <div class="progress-fill" style="width: 46%;"></div>
     </div>
     <div class="progress-caption">
       <span>26 tracked work items</span>
@@ -585,9 +585,9 @@
     <div class="panel">
       <h2><span class="dot"></span>Current status &amp; milestone</h2>
       <span class="milestone-tag">Current milestone</span>
-      <p><strong>2D card lifecycle plus contacts is feature-complete:</strong> a user can sign up for a free trial, create a 2D card, edit it, set it active, share it (QR, message, email, WhatsApp/Telegram, native share sheet), view it full-screen, manage their team under Users, build a saved-contacts address book by scanning a QR code, and send a push-notification announcement to everyone who has their card — all talking to the real production backend with unchanged request formats.</p>
+      <p><strong>The core day-to-day usage loop is feature-complete:</strong> a user can sign up for a free trial, create a 2D card, edit it, set it active, share it (QR, message, email, WhatsApp/Telegram, native share sheet), view it full-screen, manage their team under Users, build a saved-contacts address book by scanning a QR code, send a push-notification announcement to everyone who has their card, and — as of this update — receive one back too (a session-bootstrap banner plus a full screen reached by tapping the push), all talking to the real production backend with unchanged request formats.</p>
       <span class="milestone-tag next">Next milestone</span>
-      <p><strong>Receiving announcements &amp; push notifications.</strong> Sending is done; showing an announcement/notification to the people who receive one is the last piece of the app's core day-to-day usage loop still outstanding.</p>
+      <p><strong>Not yet decided.</strong> Remaining candidates: 360° cards, Bluetooth P2P sharing, Unity's separate already-paid-tenant Store surface, forgot-password, Delete Account, and Tutorials/onboarding — see the Planned rows below.</p>
     </div>
     <div class="panel">
       <h2><span class="dot" style="background: var(--risk);"></span>Risks &amp; blockers</h2>
@@ -595,6 +595,7 @@
         <li>A handful of backend quirks (e.g. a blob-path mismatch in the card-layout-edit endpoint) are being faithfully reproduced rather than fixed, per plan — a dedicated backend clean-up pass is scheduled for after full UI parity, not before.</li>
         <li>360° cards and Bluetooth P2P sharing need native plugin integration (panoramic viewer, BLE GATT protocol) — larger, riskier scope than the screens shipped so far.</li>
         <li>The paid-subscription purchase flow (both iOS StoreKit and Android Play Billing) is wired for release builds, but neither store has a real product catalog configured yet (App Store Connect / Play Console), so real purchases still fall through to the simulated debug flow in practice until that catalog work happens; server-side receipt verification stays deliberately deferred (see ADR 0001).</li>
+        <li>Push notifications are fully wired (OneSignal init, permission request, click routing, session identity linking) and unit/widget-tested, but real delivery hasn't been verified on a device — Android needs an FCM sender configured in the OneSignal dashboard, iOS needs the Push Notifications capability + an APNs key, neither of which this session had console access to do (see ADR 0002). Both platforms also still ship under the Flutter template's placeholder application id, same pre-existing gap ADR 0001 already flagged for Play Billing.</li>
       </ul>
     </div>
   </section>
@@ -701,13 +702,13 @@
         <div><div class="name">Send announcement</div><div class="note">Message + optional image, from the main view's active-card panel</div></div>
         <span class="pill done">Done</span>
       </div>
-      <div class="feature-row" data-status="planned">
-        <div><div class="name">Receive announcements</div><div class="note">Shown automatically on login if the tenant has an active one</div></div>
-        <span class="pill planned">Planned</span>
+      <div class="feature-row" data-status="partial">
+        <div><div class="name">Receive announcements</div><div class="note">Both surfaces built: a session-bootstrap banner on Home, and a full screen reached by tapping the push itself (message, sender, image, "Open sender's card")</div></div>
+        <span class="pill partial">In progress</span>
       </div>
-      <div class="feature-row" data-status="planned">
-        <div><div class="name">Push notifications</div></div>
-        <span class="pill planned">Planned</span>
+      <div class="feature-row" data-status="partial">
+        <div><div class="name">Push notifications</div><div class="note">OneSignal wired (init, permission request, click routing, session identity linking) and tested; real delivery needs Android/iOS console setup this session couldn't do — see ADR 0002</div></div>
+        <span class="pill partial">In progress</span>
       </div>
       <div class="feature-row" data-status="planned">
         <div><div class="name">Tutorials / onboarding walkthroughs</div></div>
@@ -744,6 +745,11 @@
   <section class="changelog">
     <h2>Recent updates</h2>
     <ul class="changelog-list" id="changelogList">
+      <li>
+        <span class="date">21 Jul 2026</span>
+        <p class="entry-title">Receiving announcements &amp; push notifications</p>
+        <p class="entry-body">Two surfaces, mirroring two genuinely different Unity mechanisms: a session-bootstrap banner on Home (VBC_Handler's `announcements` field from vbc/getdatawithemail — shown unconditionally on every login/refresh, since there's no dismiss/mark-read endpoint, faithfully reproducing that quirk), and a full received-announcement screen reached by tapping a push notification (message, sender, optional image, "Open sender's card" looking up the saved contact by external_id). OneSignal (`onesignal_flutter`) is wired end to end: SDK init + permission request + click listener at app start, and session-identity linking (login/logout paired with the tenant uuid, deduped so a same-tenant session refresh doesn't re-link) kept as a separate `ref.listen`-based provider rather than folded into AuthController, so the other ~200 tests that merely read the session never touch a real platform channel. Reuses Unity's exact OneSignal App ID so pushes keep reaching existing production users. Real push delivery needs Android/iOS console-side setup (FCM sender, APNs key) this session couldn't do — see the new ADR 0002. 21 new tests (payload parsing incl. malformed/missing-field safety, the banner controller's re-show-on-every-refresh quirk, the identity-sync dedup logic, the received screen's sender lookup) — full suite is 216 tests, all passing.</p>
+      </li>
       <li>
         <span class="date">21 Jul 2026</span>
         <p class="entry-title">Real Android IAP (Play Billing) for paid signup</p>
