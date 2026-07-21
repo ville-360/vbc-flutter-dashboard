@@ -550,11 +550,11 @@
 
   <section class="stats">
     <div class="stat-card done">
-      <div class="num">9</div>
+      <div class="num">10</div>
       <div class="label">Completed</div>
     </div>
     <div class="stat-card partial">
-      <div class="num">6</div>
+      <div class="num">5</div>
       <div class="label">In progress</div>
     </div>
     <div class="stat-card planned">
@@ -562,7 +562,7 @@
       <div class="label">Planned</div>
     </div>
     <div class="stat-card overall">
-      <div class="num">46%</div>
+      <div class="num">48%</div>
       <div class="label">Overall complete</div>
     </div>
   </section>
@@ -570,10 +570,10 @@
   <section class="progress-panel">
     <div class="progress-panel-top">
       <h2>Overall progress</h2>
-      <span class="progress-pct">46%</span>
+      <span class="progress-pct">48%</span>
     </div>
     <div class="progress-track">
-      <div class="progress-fill" style="width: 46%;"></div>
+      <div class="progress-fill" style="width: 48%;"></div>
     </div>
     <div class="progress-caption">
       <span>26 tracked work items</span>
@@ -613,14 +613,14 @@
   <section class="areas" id="areas">
 
     <div class="area">
-      <h3>Authentication &amp; Onboarding <span class="count">1 / 4 done</span></h3>
+      <h3>Authentication &amp; Onboarding <span class="count">2 / 4 done</span></h3>
       <div class="feature-row" data-status="done">
         <div><div class="name">Login / logout</div><div class="note">Auto-login mirrors Unity's email-only re-auth</div></div>
         <span class="pill done">Done</span>
       </div>
-      <div class="feature-row" data-status="partial">
-        <div><div class="name">Sign-up — free trial</div><div class="note">Paid subscription tiers show "coming soon"</div></div>
-        <span class="pill partial">In progress</span>
+      <div class="feature-row" data-status="done">
+        <div><div class="name">Sign-up — free trial &amp; paid tiers</div><div class="note">Account info, availability check, free trial, and real iOS/Android purchases (release builds) all wired; only real store product catalogs (App Store Connect / Play Console) are still unconfigured — see ADR 0001</div></div>
+        <span class="pill done">Done</span>
       </div>
       <div class="feature-row" data-status="planned">
         <div><div class="name">Password recovery</div></div>
@@ -745,6 +745,11 @@
   <section class="changelog">
     <h2>Recent updates</h2>
     <ul class="changelog-list" id="changelogList">
+      <li>
+        <span class="date">21 Jul 2026</span>
+        <p class="entry-title">Dashboard correction: sign-up paid tiers</p>
+        <p class="entry-body">The "Sign-up — free trial" row still said paid tiers show "coming soon" — stale since the Subscribe purchase flow shipped two updates ago (iOS StoreKit, then Android Play Billing). Corrected to Done; only the real store product catalogs (App Store Connect / Play Console) remain unconfigured, which is console-side work, not app code — see ADR 0001.</p>
+      </li>
       <li>
         <span class="date">21 Jul 2026</span>
         <p class="entry-title">Receiving announcements &amp; push notifications</p>
