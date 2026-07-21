@@ -550,19 +550,19 @@
 
   <section class="stats">
     <div class="stat-card done">
-      <div class="num">10</div>
+      <div class="num">12</div>
       <div class="label">Completed</div>
     </div>
     <div class="stat-card partial">
-      <div class="num">5</div>
+      <div class="num">4</div>
       <div class="label">In progress</div>
     </div>
     <div class="stat-card planned">
-      <div class="num">11</div>
+      <div class="num">10</div>
       <div class="label">Planned</div>
     </div>
     <div class="stat-card overall">
-      <div class="num">48%</div>
+      <div class="num">54%</div>
       <div class="label">Overall complete</div>
     </div>
   </section>
@@ -570,10 +570,10 @@
   <section class="progress-panel">
     <div class="progress-panel-top">
       <h2>Overall progress</h2>
-      <span class="progress-pct">48%</span>
+      <span class="progress-pct">54%</span>
     </div>
     <div class="progress-track">
-      <div class="progress-fill" style="width: 48%;"></div>
+      <div class="progress-fill" style="width: 54%;"></div>
     </div>
     <div class="progress-caption">
       <span>26 tracked work items</span>
@@ -585,9 +585,9 @@
     <div class="panel">
       <h2><span class="dot"></span>Current status &amp; milestone</h2>
       <span class="milestone-tag">Current milestone</span>
-      <p><strong>The core day-to-day usage loop is feature-complete:</strong> a user can sign up for a free trial, create a 2D card, edit it, set it active, share it (QR, message, email, WhatsApp/Telegram, native share sheet), view it full-screen, manage their team under Users, build a saved-contacts address book by scanning a QR code, send a push-notification announcement to everyone who has their card, and — as of this update — receive one back too (a session-bootstrap banner plus a full screen reached by tapping the push), all talking to the real production backend with unchanged request formats.</p>
+      <p><strong>The core day-to-day usage loop is feature-complete:</strong> a user can sign up for a free trial, create a 2D card, edit it, set it active, share it (QR, message, email, WhatsApp/Telegram, native share sheet), view it full-screen, manage their team under Users, build a saved-contacts address book by scanning a QR code, send a push-notification announcement to everyone who has their card, receive one back too (a session-bootstrap banner plus a full screen reached by tapping the push), and — as of this update — permanently delete their account, all talking to the real production backend with unchanged request formats.</p>
       <span class="milestone-tag next">Next milestone</span>
-      <p><strong>Not yet decided.</strong> Remaining candidates: 360° cards, Bluetooth P2P sharing, Unity's separate already-paid-tenant Store surface, forgot-password, Delete Account, and Tutorials/onboarding — see the Planned rows below.</p>
+      <p><strong>Not yet decided.</strong> Remaining candidates: 360° cards, Bluetooth P2P sharing, Unity's separate already-paid-tenant Store surface, forgot-password, and Tutorials/onboarding — see the Planned rows below.</p>
     </div>
     <div class="panel">
       <h2><span class="dot" style="background: var(--risk);"></span>Risks &amp; blockers</h2>
@@ -613,7 +613,7 @@
   <section class="areas" id="areas">
 
     <div class="area">
-      <h3>Authentication &amp; Onboarding <span class="count">2 / 4 done</span></h3>
+      <h3>Authentication &amp; Onboarding <span class="count">3 / 4 done</span></h3>
       <div class="feature-row" data-status="done">
         <div><div class="name">Login / logout</div><div class="note">Auto-login mirrors Unity's email-only re-auth</div></div>
         <span class="pill done">Done</span>
@@ -626,9 +626,9 @@
         <div><div class="name">Password recovery</div></div>
         <span class="pill planned">Planned</span>
       </div>
-      <div class="feature-row" data-status="planned">
-        <div><div class="name">Account deletion</div></div>
-        <span class="pill planned">Planned</span>
+      <div class="feature-row" data-status="done">
+        <div><div class="name">Account deletion</div><div class="note">Type-DELETE confirm mirrors Unity's two-step flow; reached from the account menu</div></div>
+        <span class="pill done">Done</span>
       </div>
     </div>
 
@@ -717,10 +717,10 @@
     </div>
 
     <div class="area">
-      <h3>Account &amp; Platform <span class="count">0 / 5 done</span></h3>
-      <div class="feature-row" data-status="partial">
-        <div><div class="name">Settings / account menu</div><div class="note">My Cards, Users, Store, Sign Out live; Delete Account still a stub</div></div>
-        <span class="pill partial">In progress</span>
+      <h3>Account &amp; Platform <span class="count">1 / 5 done</span></h3>
+      <div class="feature-row" data-status="done">
+        <div><div class="name">Settings / account menu</div><div class="note">My Cards, Users, Store, Sign Out, Delete Account all live</div></div>
+        <span class="pill done">Done</span>
       </div>
       <div class="feature-row" data-status="partial">
         <div><div class="name">In-app purchases / subscriptions</div><div class="note">New-signup purchase and the Store trial-conversion screen (+ automatic paywall once a trial expires) both wired for iOS StoreKit and Android Play Billing (release builds; debug/profile stay on the simulated flow); server-side receipt verification still to come</div></div>
@@ -745,6 +745,11 @@
   <section class="changelog">
     <h2>Recent updates</h2>
     <ul class="changelog-list" id="changelogList">
+      <li>
+        <span class="date">21 Jul 2026</span>
+        <p class="entry-title">Account deletion</p>
+        <p class="entry-body">Reached from the account menu's "Delete Account" row (previously a dummy): typing the literal word "DELETE" is the client-side confirmation gate, exactly mirroring Unity's `VBC_Handler.DeleteAccount()` input check, before `vbc/deleteaccountfromapp` is called at all. Mirrors Unity's two-step success flow rather than an instant pop — a confirmed deletion clears local storage immediately but keeps the in-memory session alive long enough to show a success view, only clearing it (and letting the router's redirect guard bounce to login) once the user taps through, matching `AccountDeletionConfirmed()` → `FinishDeletion()`. New tests cover the repository/controller success and failure paths and the screen's validation and success states; full suite is 225 tests, all passing. Live-verified against the real test backend for rendering and the type-DELETE validation gate (both empty and incorrect-case input correctly blocked client-side); the actual destructive delete call was deliberately not exercised against the shared test account, to keep it available for future QA.</p>
+      </li>
       <li>
         <span class="date">21 Jul 2026</span>
         <p class="entry-title">Dashboard correction: sign-up paid tiers</p>
