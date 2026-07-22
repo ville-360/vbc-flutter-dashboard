@@ -589,11 +589,11 @@
 
   <section class="stats">
     <div class="stat-card done">
-      <div class="num">17</div>
+      <div class="num">18</div>
       <div class="label">Completed</div>
     </div>
     <div class="stat-card partial">
-      <div class="num">2</div>
+      <div class="num">1</div>
       <div class="label">In progress</div>
     </div>
     <div class="stat-card planned">
@@ -601,7 +601,7 @@
       <div class="label">Planned</div>
     </div>
     <div class="stat-card overall">
-      <div class="num">75%</div>
+      <div class="num">77%</div>
       <div class="label">Overall complete</div>
     </div>
   </section>
@@ -609,10 +609,10 @@
   <section class="progress-panel">
     <div class="progress-panel-top">
       <h2>Overall progress</h2>
-      <span class="progress-pct">75%</span>
+      <span class="progress-pct">77%</span>
     </div>
     <div class="progress-track">
-      <div class="progress-fill" style="width: 75%;"></div>
+      <div class="progress-fill" style="width: 77%;"></div>
     </div>
     <div class="progress-caption">
       <span>24 tracked work items (excludes Backlog — see the Backlog tab below)</span>
@@ -633,7 +633,7 @@
       <ul class="risk-list">
         <li>A handful of backend quirks (e.g. a blob-path mismatch in the card-layout-edit endpoint) are being faithfully reproduced rather than fixed, per plan — a dedicated backend clean-up pass is scheduled for after full UI parity, not before.</li>
         <li>Bluetooth P2P sharing (nearby list, tap-to-share, accept/decline) is built and unit/widget-tested against a fake BLE service, but the real native transport (`bluetooth_low_energy`'s Android/iOS platform channels) can't be exercised in this environment — no BLE radio, and neither the iOS Simulator nor most Android emulators support real BLE peripheral/central operation. A follow-up pass with two physical devices is needed to confirm real-world pairing. 360° cards would need similar native-plugin work (a panoramic viewer) but have been deprioritized to the Backlog tab.</li>
-        <li>The paid-subscription purchase flow (both iOS StoreKit and Android Play Billing) is wired for release builds, but neither store has a real product catalog configured yet (App Store Connect / Play Console), so real purchases still fall through to the simulated debug flow in practice until that catalog work happens; server-side receipt verification stays deliberately deferred (see ADR 0001).</li>
+        <li>The paid-subscription purchase flow (both iOS StoreKit and Android Play Billing) is wired for release builds, but neither store has a real product catalog configured yet (App Store Connect / Play Console), so real purchases still fall through to the simulated debug flow in practice until that catalog work happens. Server-side receipt verification is tracked separately in the Backlog tab (see ADR 0001).</li>
         <li>Push notifications are fully wired (OneSignal init, permission request, click routing, session identity linking) and unit/widget-tested — the receiving UI (banner + full screen) is done — but real delivery hasn't been verified on a device. Android's POST_NOTIFICATIONS permission and iOS's UIBackgroundModes are now declared, but an FCM sender and an APNs key still need to be configured in the Firebase/OneSignal/Xcode consoles, none of which any session so far has had access to (see ADR 0002). This is the same underlying gap ADR 0001 flags for Play Billing/StoreKit: all four are blocked on replacing the placeholder `com.example.vbc_flutter` application id with a real one and standing up the matching console projects/listings.</li>
       </ul>
     </div>
@@ -754,14 +754,14 @@
     </div>
 
     <div class="area">
-      <h3>Account &amp; Platform <span class="count">1 / 5 done</span></h3>
+      <h3>Account &amp; Platform <span class="count">2 / 5 done</span></h3>
       <div class="feature-row" data-status="done">
         <div><div class="name">Settings / account menu</div><div class="note">My Cards, Users, Store, Sign Out, Delete Account all live</div></div>
         <span class="pill done">Done</span>
       </div>
-      <div class="feature-row" data-status="partial">
-        <div><div class="name">In-app purchases / subscriptions</div><div class="note">New-signup purchase and the Store trial-conversion screen (+ automatic paywall once a trial expires) both wired for iOS StoreKit and Android Play Billing (release builds; debug/profile stay on the simulated flow); server-side receipt verification still to come</div></div>
-        <span class="pill partial">In progress</span>
+      <div class="feature-row" data-status="done">
+        <div><div class="name">In-app purchases / subscriptions</div><div class="note">New-signup purchase and the Store trial-conversion screen (+ automatic paywall once a trial expires) both wired for iOS StoreKit and Android Play Billing (release builds; debug/profile stay on the simulated flow). Server-side receipt verification moved to the Backlog tab — see below</div></div>
+        <span class="pill done">Done</span>
       </div>
       <div class="feature-row" data-status="planned">
         <div><div class="name">Home-screen widgets</div></div>
@@ -792,12 +792,25 @@
         </div>
       </div>
 
+      <div class="area">
+        <h3>Payments Hardening <span class="count">0 / 1 done</span></h3>
+        <div class="feature-row" data-status="planned">
+          <div><div class="name">Server-side receipt verification</div><div class="note">vbc/validatereceipt — iOS-only even in Unity. Purchases already work end to end via the simulated debug flow and (once store product catalogs are configured) real StoreKit/Play Billing; this closes the gap of the backend actually verifying a receipt server-side rather than trusting the client. Deliberately deferred — see ADR 0001</div></div>
+          <span class="pill planned">Planned</span>
+        </div>
+      </div>
+
     </section>
   </div>
 
   <section class="changelog">
     <h2>Recent updates</h2>
     <ul class="changelog-list" id="changelogList">
+      <li>
+        <span class="date">22 Jul 2026</span>
+        <p class="entry-title">Dashboard correction: In-app purchases / subscriptions</p>
+        <p class="entry-body">Server-side receipt verification (`vbc/validatereceipt`) was the only thing keeping this row at "In progress" — moved it to its own Backlog entry (new "Payments Hardening" area) since it's a deliberately deferred hardening step (see ADR 0001), not blocking work in flight. New-signup purchase and Store trial-conversion are both fully wired for release-build StoreKit/Play Billing, so the row itself is now Done.</p>
+      </li>
       <li>
         <span class="date">22 Jul 2026</span>
         <p class="entry-title">Bluetooth P2P card sharing</p>
