@@ -798,12 +798,29 @@
         </div>
       </div>
 
+      <div class="area">
+        <h3>Release QA (real device) <span class="count">0 / 2 done</span></h3>
+        <div class="feature-row" data-status="planned">
+          <div><div class="name">Verify the app builds on a real device</div><div class="note">Owned by the user, not this session — to be performed once the rest of the roadmap is finished, then reported back. Covers exactly what this environment structurally can't: a real signed build (Android keystore, iOS provisioning) actually installing and launching on physical hardware</div></div>
+          <span class="pill planned">Planned</span>
+        </div>
+        <div class="feature-row" data-status="planned">
+          <div><div class="name">Verify application features on a real device</div><div class="note">Owned by the user, not this session — to be performed once the rest of the roadmap is finished, then reported back. Covers everything already flagged throughout the roadmap/ADRs as "can't verify without a physical device": real Bluetooth P2P pairing, real push delivery, real Universal/App Link taps, real camera/QR scanning end to end, etc.</div></div>
+          <span class="pill planned">Planned</span>
+        </div>
+      </div>
+
     </section>
   </div>
 
   <section class="changelog">
     <h2>Recent updates</h2>
     <ul class="changelog-list" id="changelogList">
+      <li>
+        <span class="date">22 Jul 2026</span>
+        <p class="entry-title">Added Release QA (real device) to Backlog; Push notifications stays In progress</p>
+        <p class="entry-body">Added a new Backlog area for the two real-device verification passes the user will run themselves once the rest of the roadmap is finished ("app builds on a real device" and "application features on a real device") and report back on — these cover everything already flagged throughout the roadmap/ADRs as impossible to verify from this sandbox (no BLE radio, no physical Bluetooth pairing, no real push delivery, no real Universal/App Link taps, etc.). Checked whether that alone was enough to also mark Push notifications Done: it isn't. Real-device testing and the remaining iOS Xcode step are two different things — iOS still needs the "Push Notifications" capability explicitly enabled on the Runner target (which is what actually wires the `aps-environment` entitlement into the build); without it, there's nothing to test yet, since the app can't register for remote notifications at all. That's a one-time configuration action, not something a device test surfaces or fixes on its own — so the row stays In progress until that capability is enabled (ideally in the same Xcode session as the widget import), at which point real-device testing is the last remaining check.</p>
+      </li>
       <li>
         <span class="date">22 Jul 2026</span>
         <p class="entry-title">Real applicationId/Bundle ID (com.Mediahouse.VBCapp)</p>
