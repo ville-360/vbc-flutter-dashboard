@@ -589,11 +589,11 @@
 
   <section class="stats">
     <div class="stat-card done">
-      <div class="num">16</div>
+      <div class="num">17</div>
       <div class="label">Completed</div>
     </div>
     <div class="stat-card partial">
-      <div class="num">3</div>
+      <div class="num">2</div>
       <div class="label">In progress</div>
     </div>
     <div class="stat-card planned">
@@ -601,7 +601,7 @@
       <div class="label">Planned</div>
     </div>
     <div class="stat-card overall">
-      <div class="num">73%</div>
+      <div class="num">75%</div>
       <div class="label">Overall complete</div>
     </div>
   </section>
@@ -609,10 +609,10 @@
   <section class="progress-panel">
     <div class="progress-panel-top">
       <h2>Overall progress</h2>
-      <span class="progress-pct">73%</span>
+      <span class="progress-pct">75%</span>
     </div>
     <div class="progress-track">
-      <div class="progress-fill" style="width: 73%;"></div>
+      <div class="progress-fill" style="width: 75%;"></div>
     </div>
     <div class="progress-caption">
       <span>24 tracked work items (excludes Backlog — see the Backlog tab below)</span>
@@ -624,15 +624,15 @@
     <div class="panel">
       <h2><span class="dot"></span>Current status &amp; milestone</h2>
       <span class="milestone-tag">Current milestone</span>
-      <p><strong>The core day-to-day usage loop is feature-complete:</strong> a user can sign up for a free trial, create a 2D card, edit it (with live upload/processing progress on the tile — as of this update), set it active, share it (QR, message, email, WhatsApp/Telegram, native share sheet), view it full-screen, manage their team under Users, build a saved-contacts address book by scanning a QR code, send a push-notification announcement to everyone who has their card, receive one back too (a session-bootstrap banner plus a full screen reached by tapping the push), permanently delete their account, and recover a forgotten password, all talking to the real production backend with unchanged request formats. Authentication &amp; Onboarding and Card Creation &amp; Management are now both fully done.</p>
+      <p><strong>The core day-to-day usage loop is feature-complete:</strong> a user can sign up for a free trial, create a 2D card, edit it (with live upload/processing progress on the tile — as of this update), set it active, share it (QR, message, email, WhatsApp/Telegram, native share sheet, and now real Bluetooth P2P — see below), view it full-screen (including a saved contact's/shared card), manage their team under Users, build a saved-contacts address book by scanning a QR code, send a push-notification announcement to everyone who has their card, receive one back too (a session-bootstrap banner plus a full screen reached by tapping the push), permanently delete their account, and recover a forgotten password, all talking to the real production backend with unchanged request formats. Authentication &amp; Onboarding and Card Creation &amp; Management are now both fully done.</p>
       <span class="milestone-tag next">Next milestone</span>
-      <p><strong>Not yet decided.</strong> Remaining candidates: Bluetooth P2P sharing, Unity's separate already-paid-tenant Store surface, and Tutorials/onboarding — see the Planned rows below. 360° cards have been moved to the <strong>Backlog</strong> tab and aren't part of the near-term roadmap.</p>
+      <p><strong>Not yet decided.</strong> Remaining candidates: Unity's separate already-paid-tenant Store surface, Widget &amp; deep-link sharing, and Tutorials/onboarding — see the Planned rows below. 360° cards have been moved to the <strong>Backlog</strong> tab and aren't part of the near-term roadmap.</p>
     </div>
     <div class="panel">
       <h2><span class="dot" style="background: var(--risk);"></span>Risks &amp; blockers</h2>
       <ul class="risk-list">
         <li>A handful of backend quirks (e.g. a blob-path mismatch in the card-layout-edit endpoint) are being faithfully reproduced rather than fixed, per plan — a dedicated backend clean-up pass is scheduled for after full UI parity, not before.</li>
-        <li>Bluetooth P2P sharing needs native plugin integration (BLE GATT protocol) — larger, riskier scope than the screens shipped so far. 360° cards would need similar native-plugin work (a panoramic viewer) but have been deprioritized to the Backlog tab.</li>
+        <li>Bluetooth P2P sharing (nearby list, tap-to-share, accept/decline) is built and unit/widget-tested against a fake BLE service, but the real native transport (`bluetooth_low_energy`'s Android/iOS platform channels) can't be exercised in this environment — no BLE radio, and neither the iOS Simulator nor most Android emulators support real BLE peripheral/central operation. A follow-up pass with two physical devices is needed to confirm real-world pairing. 360° cards would need similar native-plugin work (a panoramic viewer) but have been deprioritized to the Backlog tab.</li>
         <li>The paid-subscription purchase flow (both iOS StoreKit and Android Play Billing) is wired for release builds, but neither store has a real product catalog configured yet (App Store Connect / Play Console), so real purchases still fall through to the simulated debug flow in practice until that catalog work happens; server-side receipt verification stays deliberately deferred (see ADR 0001).</li>
         <li>Push notifications are fully wired (OneSignal init, permission request, click routing, session identity linking) and unit/widget-tested — the receiving UI (banner + full screen) is done — but real delivery hasn't been verified on a device. Android's POST_NOTIFICATIONS permission and iOS's UIBackgroundModes are now declared, but an FCM sender and an APNs key still need to be configured in the Firebase/OneSignal/Xcode consoles, none of which any session so far has had access to (see ADR 0002). This is the same underlying gap ADR 0001 flags for Play Billing/StoreKit: all four are blocked on replacing the placeholder `com.example.vbc_flutter` application id with a real one and standing up the matching console projects/listings.</li>
       </ul>
@@ -698,7 +698,7 @@
     </div>
 
     <div class="area">
-      <h3>Card Viewing &amp; Sharing <span class="count">3 / 5 done</span></h3>
+      <h3>Card Viewing &amp; Sharing <span class="count">4 / 5 done</span></h3>
       <div class="feature-row" data-status="done">
         <div><div class="name">Full-screen card viewer (2D, own card)</div><div class="note">Media, audio, contact actions, vCard export</div></div>
         <span class="pill done">Done</span>
@@ -707,9 +707,9 @@
         <div><div class="name">Share screen</div><div class="note">QR, custom message, email, WhatsApp/Telegram, native share</div></div>
         <span class="pill done">Done</span>
       </div>
-      <div class="feature-row" data-status="partial">
-        <div><div class="name">Bluetooth P2P sharing</div><div class="note">UI shown as "Soon"; BLE functionality not wired yet</div></div>
-        <span class="pill partial">In progress</span>
+      <div class="feature-row" data-status="done">
+        <div><div class="name">Bluetooth P2P sharing</div><div class="note">Nearby-list + tap-to-share + accept/decline, a from-scratch better-UX rebuild (Unity's own auto-connect-and-blast mechanism was never really usable); real device pairing not verifiable in this environment</div></div>
+        <span class="pill done">Done</span>
       </div>
       <div class="feature-row" data-status="done">
         <div><div class="name">Viewing others'/shared cards</div><div class="note">In-app viewer for a saved contact's card (Contacts' "View"); deep-linked/QR-scanned external viewing is the separate row below</div></div>
@@ -798,6 +798,11 @@
   <section class="changelog">
     <h2>Recent updates</h2>
     <ul class="changelog-list" id="changelogList">
+      <li>
+        <span class="date">22 Jul 2026</span>
+        <p class="entry-title">Bluetooth P2P card sharing</p>
+        <p class="entry-body">A real nearby-list + tap-to-share + accept/decline flow on the Share screen, replacing the disabled "Bluetooth: Soon" tile — deliberately <strong>not</strong> a port of `BluetoothManager.cs`'s actual shipped mechanics (every device auto-connects to and auto-blasts its card at any other nearby device the instant a BLE connection forms, with no real list or user intent involved — the tap-to-send UI exists in Unity's code but the call that would wire it up is dead). Unity was used only to confirm the feature's goal and its two backend calls. New `bluetooth_low_energy` dependency (a single package covering both central/scanning and peripheral/advertising roles, verified live against pub.dev before committing to it) powers a from-scratch GATT protocol: a fixed custom service UUID for discovery, a truncated advertised name for the nearby-list label (BLE ad packets are only a few dozen bytes), and a `share_request` characteristic carrying the full untruncated identity as JSON once a user actually taps someone — no reply/ack, matching Unity's own asymmetry that the sender never learns the outcome. On Accept: `vbc/vbccontactaccepted` (exact Unity field set) resolves the full card, `vbc/savecontact` persists it under Contacts (reusing the existing repository verbatim), then the sender's card opens via the just-shipped `SharedCardViewerScreen`. Advertising/scanning/listening are all tied to the Share screen's own lifecycle (start on mount, stop on unmount) — a request only works while both people currently have Share open, the same scope Unity's own mechanism needed, called out explicitly as a disclosed decision rather than a silent one. 36 new tests (protocol encode/decode incl. malformed-payload and UTF-8-safe truncation, the nearby-list and incoming-request controllers against a fake BLE service, both new widgets across every state, and a full Share-screen accept/decline/navigate integration test) — full suite is 282 tests, all passing, plus a clean `flutter analyze` and a real `flutter build web` compile check. The native BLE transport itself (real advertising/scanning/pairing on physical Android/iOS hardware) can't be verified in this environment — no BLE radio, and neither the iOS Simulator nor most Android emulators support real BLE peripheral/central operation — flagged as a follow-up needing two physical devices, same accepted boundary as this app's existing IAP/push-notification work.</p>
+      </li>
       <li>
         <span class="date">22 Jul 2026</span>
         <p class="entry-title">Viewing others'/shared cards</p>
