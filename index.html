@@ -589,7 +589,7 @@
 
   <section class="stats">
     <div class="stat-card done">
-      <div class="num">20</div>
+      <div class="num">21</div>
       <div class="label">Completed</div>
     </div>
     <div class="stat-card partial">
@@ -597,11 +597,11 @@
       <div class="label">In progress</div>
     </div>
     <div class="stat-card planned">
-      <div class="num">3</div>
+      <div class="num">1</div>
       <div class="label">Planned</div>
     </div>
     <div class="stat-card overall">
-      <div class="num">85%</div>
+      <div class="num">93%</div>
       <div class="label">Overall complete</div>
     </div>
   </section>
@@ -609,13 +609,13 @@
   <section class="progress-panel">
     <div class="progress-panel-top">
       <h2>Overall progress</h2>
-      <span class="progress-pct">85%</span>
+      <span class="progress-pct">93%</span>
     </div>
     <div class="progress-track">
-      <div class="progress-fill" style="width: 85%;"></div>
+      <div class="progress-fill" style="width: 93%;"></div>
     </div>
     <div class="progress-caption">
-      <span>24 tracked work items (excludes Backlog — see the Backlog tab below)</span>
+      <span>23 tracked work items (excludes Backlog — see the Backlog tab below)</span>
       <span>Weighted: done = 100%, in progress = 50%</span>
     </div>
   </section>
@@ -626,7 +626,7 @@
       <span class="milestone-tag">Current milestone</span>
       <p><strong>The core day-to-day usage loop is feature-complete:</strong> a user can sign up for a free trial, create a 2D card, edit it (with live upload/processing progress on the tile — as of this update), set it active, share it (QR, message, email, WhatsApp/Telegram, native share sheet, and now real Bluetooth P2P — see below), view it full-screen (including a saved contact's/shared card), manage their team under Users, build a saved-contacts address book by scanning a QR code, send a push-notification announcement to everyone who has their card, receive one back too (a session-bootstrap banner plus a full screen reached by tapping the push), permanently delete their account, and recover a forgotten password, all talking to the real production backend with unchanged request formats. Authentication &amp; Onboarding and Card Creation &amp; Management are now both fully done.</p>
       <span class="milestone-tag next">Next milestone</span>
-      <p><strong>Not yet decided.</strong> Remaining candidates: Unity's separate already-paid-tenant Store surface, Widget &amp; deep-link sharing, and Tutorials/onboarding — see the Planned rows below. 360° cards have been moved to the <strong>Backlog</strong> tab and aren't part of the near-term roadmap.</p>
+      <p><strong>Not yet decided.</strong> Remaining candidates: Unity's separate already-paid-tenant Store surface and Tutorials/onboarding — see the Planned rows below. 360° cards have been moved to the <strong>Backlog</strong> tab and aren't part of the near-term roadmap.</p>
     </div>
     <div class="panel">
       <h2><span class="dot" style="background: var(--risk);"></span>Risks &amp; blockers</h2>
@@ -635,6 +635,7 @@
         <li>Bluetooth P2P sharing (nearby list, tap-to-share, accept/decline) is built and unit/widget-tested against a fake BLE service, but the real native transport (`bluetooth_low_energy`'s Android/iOS platform channels) can't be exercised in this environment — no BLE radio, and neither the iOS Simulator nor most Android emulators support real BLE peripheral/central operation. A follow-up pass with two physical devices is needed to confirm real-world pairing. 360° cards would need similar native-plugin work (a panoramic viewer) but have been deprioritized to the Backlog tab.</li>
         <li>The paid-subscription purchase flow (both iOS StoreKit and Android Play Billing) is wired for release builds, but neither store has a real product catalog configured yet (App Store Connect / Play Console), so real purchases still fall through to the simulated debug flow in practice until that catalog work happens. Server-side receipt verification is tracked separately in the Backlog tab (see ADR 0001).</li>
         <li>Push notifications are fully wired (OneSignal init, permission request, click routing, session identity linking) and unit/widget-tested — the receiving UI (banner + full screen) is done — but real delivery hasn't been verified on a device. Android's POST_NOTIFICATIONS permission and iOS's UIBackgroundModes are now declared, but an FCM sender and an APNs key still need to be configured in the Firebase/OneSignal/Xcode consoles, none of which any session so far has had access to (see ADR 0002). This is the same underlying gap ADR 0001 flags for Play Billing/StoreKit: all four are blocked on replacing the placeholder `com.example.vbc_flutter` application id with a real one and standing up the matching console projects/listings.</li>
+        <li>Widget &amp; deep-link sharing's app-side logic is code-complete and tested, including a real bug caught before shipping (the Android widget's `vbc_app://` scheme has an underscore, invalid per RFC 3986 — `package:app_links`' URI-based stream silently drops it, so the raw-string stream is used instead). Real shared-card links (Universal/App Links) won't open the app on a device yet: the domain needs to host `.well-known/assetlinks.json` (Android) and `apple-app-site-association` (iOS) referencing this app's real bundle id, and the iOS entitlements file this app now ships still needs a one-time Xcode "Associated Domains" capability pass to actually get wired into the build. Same underlying placeholder-application-id gap as the row above — see ADR 0003.</li>
       </ul>
     </div>
   </section>
@@ -698,7 +699,7 @@
     </div>
 
     <div class="area">
-      <h3>Card Viewing &amp; Sharing <span class="count">4 / 5 done</span></h3>
+      <h3>Card Viewing &amp; Sharing <span class="count">5 / 5 done</span></h3>
       <div class="feature-row" data-status="done">
         <div><div class="name">Full-screen card viewer (2D, own card)</div><div class="note">Media, audio, contact actions, vCard export</div></div>
         <span class="pill done">Done</span>
@@ -715,9 +716,9 @@
         <div><div class="name">Viewing others'/shared cards</div><div class="note">In-app viewer for a saved contact's card (Contacts' "View"); deep-linked/QR-scanned external viewing is the separate row below</div></div>
         <span class="pill done">Done</span>
       </div>
-      <div class="feature-row" data-status="planned">
-        <div><div class="name">Widget &amp; deep-link sharing</div></div>
-        <span class="pill planned">Planned</span>
+      <div class="feature-row" data-status="done">
+        <div><div class="name">Widget &amp; deep-link sharing</div><div class="note">The app-side response to a shared-card link or a tap on the (separately-imported, native) home-screen widget — not the widget itself. A shared-card link (view./card.virtualbusinesscard.ai) opens that card even with no session at all, matching the public oculus/gettraditionalcarddata endpoint; a widget tap opens Share. Android/iOS Universal/App Links still need domain-hosted association files + the app's real bundle id before they work on a real device — see ADR 0003</div></div>
+        <span class="pill done">Done</span>
       </div>
     </div>
 
@@ -754,7 +755,7 @@
     </div>
 
     <div class="area">
-      <h3>Account &amp; Platform <span class="count">4 / 5 done</span></h3>
+      <h3>Account &amp; Platform <span class="count">4 / 4 done</span></h3>
       <div class="feature-row" data-status="done">
         <div><div class="name">Settings / account menu</div><div class="note">My Cards, Users, Store, Sign Out, Delete Account all live</div></div>
         <span class="pill done">Done</span>
@@ -762,10 +763,6 @@
       <div class="feature-row" data-status="done">
         <div><div class="name">In-app purchases / subscriptions</div><div class="note">New-signup purchase and the Store trial-conversion screen (+ automatic paywall once a trial expires) both wired for iOS StoreKit and Android Play Billing (release builds; debug/profile stay on the simulated flow). Server-side receipt verification moved to the Backlog tab — see below</div></div>
         <span class="pill done">Done</span>
-      </div>
-      <div class="feature-row" data-status="planned">
-        <div><div class="name">Home-screen widgets</div></div>
-        <span class="pill planned">Planned</span>
       </div>
       <div class="feature-row" data-status="done">
         <div><div class="name">HEIC image conversion</div><div class="note">Every image pick (card main media, logo, announcements) now converts HEIC/HEIF to real PNG bytes before upload, mirroring `HeicConverter.cs` — a real gap, not just a historical one: image_picker doesn't normalize this away on iOS, and the blob paths/content-type this app uploads to are hardcoded to `image/png`</div></div>
@@ -806,6 +803,16 @@
   <section class="changelog">
     <h2>Recent updates</h2>
     <ul class="changelog-list" id="changelogList">
+      <li>
+        <span class="date">22 Jul 2026</span>
+        <p class="entry-title">Widget &amp; deep-link sharing</p>
+        <p class="entry-body">The app-side response to a shared-card link or a tap on the old native home-screen widget (not the widget itself — see the dashboard-correction entry below). A shared-card link (view./card.virtualbusinesscard.ai with a guestpass) now opens straight to that card via the existing `SharedCardViewerScreen`, even with no session at all — the router's redirect guard now exempts that one route, matching `oculus/gettraditionalcarddata` being a genuinely public endpoint the same way Unity's own `OpenCardFromOutside()` needs no login. A widget tap opens Share. Caught a real bug before it could ship silently: the Android widget's actual shipped code (`VBCAppWidget.java`) uses the scheme `vbc_app://`, which contains an underscore — invalid per RFC 3986 — so Dart's strict `Uri.parse` rejects it, and `package:app_links`' URI-based stream resolves links via `Uri.tryParse` internally and would have silently dropped the widget's tap with no error at all. Fixed by parsing the raw string `app_links` also exposes (`stringLinkStream`) instead, with lenient prefix-checks ahead of any real URI parsing. Real device delivery of the Universal/App Links path (not the widget-tap path, which needs no domain hosting) still needs domain-hosted association files and the app's real bundle id — full writeup in the new `docs/adr/0003`. 12 new tests (link parsing across both schemes and both hosts, the router's new public-route exemption across every auth state) — full suite is 323 tests, all passing, plus a clean `flutter analyze` and a real `flutter build web` compile check.</p>
+      </li>
+      <li>
+        <span class="date">22 Jul 2026</span>
+        <p class="entry-title">Dashboard correction: removed Home-screen widgets</p>
+        <p class="entry-body">Dropped from the roadmap entirely (not moved to Backlog) — the user is importing the existing native iOS/Android widget extensions (`Widget.cs`'s shared-storage bridge, `VBCAppWidget.java`) directly into Xcode/Android Studio before the Flutter app ships, so building the widget itself was never going to be Flutter-rewrite work. What the Flutter app *is* responsible for — responding correctly when one of those already-built widgets is tapped — is tracked separately as "Widget &amp; deep-link sharing" under Card Viewing &amp; Sharing.</p>
+      </li>
       <li>
         <span class="date">22 Jul 2026</span>
         <p class="entry-title">Dev/QA server switch panel; HEIC image conversion</p>
