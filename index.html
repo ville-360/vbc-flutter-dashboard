@@ -582,14 +582,14 @@
       <p class="hero-sub">Progress of the Flutter reimplementation of the production Unity app, tracked against the same backend and user experience.</p>
     </div>
     <div class="hero-meta">
-      <strong id="lastUpdated">Last updated 20 Jul 2026</strong>
+      <strong id="lastUpdated">Last updated 22 Jul 2026</strong>
       Generated from the engineering task tracker
     </div>
   </header>
 
   <section class="stats">
     <div class="stat-card done">
-      <div class="num">15</div>
+      <div class="num">16</div>
       <div class="label">Completed</div>
     </div>
     <div class="stat-card partial">
@@ -597,11 +597,11 @@
       <div class="label">In progress</div>
     </div>
     <div class="stat-card planned">
-      <div class="num">6</div>
+      <div class="num">5</div>
       <div class="label">Planned</div>
     </div>
     <div class="stat-card overall">
-      <div class="num">69%</div>
+      <div class="num">73%</div>
       <div class="label">Overall complete</div>
     </div>
   </section>
@@ -609,10 +609,10 @@
   <section class="progress-panel">
     <div class="progress-panel-top">
       <h2>Overall progress</h2>
-      <span class="progress-pct">69%</span>
+      <span class="progress-pct">73%</span>
     </div>
     <div class="progress-track">
-      <div class="progress-fill" style="width: 69%;"></div>
+      <div class="progress-fill" style="width: 73%;"></div>
     </div>
     <div class="progress-caption">
       <span>24 tracked work items (excludes Backlog — see the Backlog tab below)</span>
@@ -698,7 +698,7 @@
     </div>
 
     <div class="area">
-      <h3>Card Viewing &amp; Sharing <span class="count">2 / 5 done</span></h3>
+      <h3>Card Viewing &amp; Sharing <span class="count">3 / 5 done</span></h3>
       <div class="feature-row" data-status="done">
         <div><div class="name">Full-screen card viewer (2D, own card)</div><div class="note">Media, audio, contact actions, vCard export</div></div>
         <span class="pill done">Done</span>
@@ -711,9 +711,9 @@
         <div><div class="name">Bluetooth P2P sharing</div><div class="note">UI shown as "Soon"; BLE functionality not wired yet</div></div>
         <span class="pill partial">In progress</span>
       </div>
-      <div class="feature-row" data-status="planned">
-        <div><div class="name">Viewing others'/shared cards</div><div class="note">Contact-card &amp; deep-linked viewing</div></div>
-        <span class="pill planned">Planned</span>
+      <div class="feature-row" data-status="done">
+        <div><div class="name">Viewing others'/shared cards</div><div class="note">In-app viewer for a saved contact's card (Contacts' "View"); deep-linked/QR-scanned external viewing is the separate row below</div></div>
+        <span class="pill done">Done</span>
       </div>
       <div class="feature-row" data-status="planned">
         <div><div class="name">Widget &amp; deep-link sharing</div></div>
@@ -798,6 +798,11 @@
   <section class="changelog">
     <h2>Recent updates</h2>
     <ul class="changelog-list" id="changelogList">
+      <li>
+        <span class="date">22 Jul 2026</span>
+        <p class="entry-title">Viewing others'/shared cards</p>
+        <p class="entry-body">A saved contact's "View" action (Contacts screen) now opens the card in-app instead of launching the browser — mirrors `BusinessCard.cs`'s `isOwnCard == false` path (`VBC_Handler.ViewContactCard()` → `OpenCard(false, true)`), fetching via the public `oculus/gettraditionalcarddata` endpoint keyed by the contact's card `external_id` (Unity's `Contact.selectedContactUuid`), the same quirky choice Unity makes regardless of the card's legacy/traditional flags. Refactored the own-card viewer's background/logo/audio media widgets and providers to key off a new `CardMediaLocation` (tenantUuid/cardUuid/media-presence flags) instead of a `BusinessCard` directly, so the new `SharedCardViewerScreen` reuses the exact same media-fetching machinery instead of duplicating it — the own-card viewer itself is unchanged behaviorally. Scope note, faithful to Unity: still only 2D cards (Unity has no external viewer for 360 cards reached this way either), and only the Contacts entry point — deep-link/QR-scanned external viewing stays a separate planned item. 9 new tests (nested-JSON flattening incl. the boolean/string `is_video` coercion, the fetch provider, loading/error screen states, and the Contacts "View" navigation), plus the existing media-location provider/audio-controller tests updated for the `CardMediaLocation` refactor — full suite is 246 tests, all passing.</p>
+      </li>
       <li>
         <span class="date">21 Jul 2026</span>
         <p class="entry-title">Async processing status; added a Backlog tab, moved 360° cards into it</p>
