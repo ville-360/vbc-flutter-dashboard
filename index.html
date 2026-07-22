@@ -589,7 +589,7 @@
 
   <section class="stats">
     <div class="stat-card done">
-      <div class="num">18</div>
+      <div class="num">20</div>
       <div class="label">Completed</div>
     </div>
     <div class="stat-card partial">
@@ -597,11 +597,11 @@
       <div class="label">In progress</div>
     </div>
     <div class="stat-card planned">
-      <div class="num">5</div>
+      <div class="num">3</div>
       <div class="label">Planned</div>
     </div>
     <div class="stat-card overall">
-      <div class="num">77%</div>
+      <div class="num">85%</div>
       <div class="label">Overall complete</div>
     </div>
   </section>
@@ -609,10 +609,10 @@
   <section class="progress-panel">
     <div class="progress-panel-top">
       <h2>Overall progress</h2>
-      <span class="progress-pct">77%</span>
+      <span class="progress-pct">85%</span>
     </div>
     <div class="progress-track">
-      <div class="progress-fill" style="width: 77%;"></div>
+      <div class="progress-fill" style="width: 85%;"></div>
     </div>
     <div class="progress-caption">
       <span>24 tracked work items (excludes Backlog — see the Backlog tab below)</span>
@@ -754,7 +754,7 @@
     </div>
 
     <div class="area">
-      <h3>Account &amp; Platform <span class="count">2 / 5 done</span></h3>
+      <h3>Account &amp; Platform <span class="count">4 / 5 done</span></h3>
       <div class="feature-row" data-status="done">
         <div><div class="name">Settings / account menu</div><div class="note">My Cards, Users, Store, Sign Out, Delete Account all live</div></div>
         <span class="pill done">Done</span>
@@ -767,13 +767,13 @@
         <div><div class="name">Home-screen widgets</div></div>
         <span class="pill planned">Planned</span>
       </div>
-      <div class="feature-row" data-status="planned">
-        <div><div class="name">HEIC image conversion</div></div>
-        <span class="pill planned">Planned</span>
+      <div class="feature-row" data-status="done">
+        <div><div class="name">HEIC image conversion</div><div class="note">Every image pick (card main media, logo, announcements) now converts HEIC/HEIF to real PNG bytes before upload, mirroring `HeicConverter.cs` — a real gap, not just a historical one: image_picker doesn't normalize this away on iOS, and the blob paths/content-type this app uploads to are hardcoded to `image/png`</div></div>
+        <span class="pill done">Done</span>
       </div>
-      <div class="feature-row" data-status="planned">
-        <div><div class="name">Dev/QA server switch panel</div></div>
-        <span class="pill planned">Planned</span>
+      <div class="feature-row" data-status="done">
+        <div><div class="name">Dev/QA server switch panel</div><div class="note">Ten rapid taps on the login screen's version label (mirrors `DevSettings.cs`'s combo) opens a sheet to switch between Default/Test env/Localhost — persisted across restarts (Unity's own panel resets on every cold start)</div></div>
+        <span class="pill done">Done</span>
       </div>
     </div>
 
@@ -806,6 +806,11 @@
   <section class="changelog">
     <h2>Recent updates</h2>
     <ul class="changelog-list" id="changelogList">
+      <li>
+        <span class="date">22 Jul 2026</span>
+        <p class="entry-title">Dev/QA server switch panel; HEIC image conversion</p>
+        <p class="entry-body">Two small platform-hardening pieces, both faithful-to-Unity in mechanism, idiomatic Flutter in implementation. <strong>Dev/QA panel</strong>: ten rapid taps on the login screen's version label — the same combo timing as `DevSettings.cs`'s `OnButtonTapped()` (a reusable `RapidTapDetector` rather than one-off tap-counting state) — opens a bottom sheet to switch between Default/Test env/Localhost, immediately rebuilding the shared `Dio` client (and everything built on it) via Riverpod's dependency graph instead of requiring a restart. Persisted across app restarts, a deliberate improvement over `DevSettings.cs`, which resets to default on every cold start. <strong>HEIC conversion</strong>: a real, live gap, not just a historical one — `image_picker` does not normalize HEIC away on iOS, and this app's blob paths/content-type headers for card media are hardcoded to `image/png` (matching Unity's own upload convention), so an unconverted HEIC pick would silently upload a corrupt image. Every image pick (card main media, logo, announcements) now runs through one shared conversion gate in `MediaPickerService` (`flutter_image_compress`, format: PNG) instead of Unity's several separate `HeicConverter.Convert()` call sites, with the exact same graceful fallback Unity's own `#else` branch has — a failed/unsupported conversion (e.g. web, which can't decode HEIC input via Canvas at all) passes the original bytes through rather than blocking the pick. 27 new tests (the tap-detector's combo/reset/threshold logic, environment persistence and Dio-rebuild-on-switch, the dev sheet's UI states, and HEIC detection/conversion/fallback against a fake converter) — full suite is 309 tests, all passing, plus a clean `flutter analyze` and a real `flutter build web` compile check.</p>
+      </li>
       <li>
         <span class="date">22 Jul 2026</span>
         <p class="entry-title">Dashboard correction: In-app purchases / subscriptions</p>
