@@ -324,19 +324,19 @@
   .risk-list li {
     font-size: 13.5px;
     color: var(--text-dim);
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
+    position: relative;
+    padding-left: 16px;
   }
 
   .risk-list li::before {
     content: "";
+    position: absolute;
+    left: 0;
+    top: 6px;
     width: 6px;
     height: 6px;
     border-radius: 50%;
     background: var(--risk);
-    margin-top: 6px;
-    flex: none;
   }
 
   /* ---------- Feature board ---------- */
@@ -589,19 +589,19 @@
 
   <section class="stats">
     <div class="stat-card done">
-      <div class="num">21</div>
+      <div class="num">22</div>
       <div class="label">Completed</div>
     </div>
     <div class="stat-card partial">
-      <div class="num">1</div>
+      <div class="num">0</div>
       <div class="label">In progress</div>
     </div>
     <div class="stat-card planned">
-      <div class="num">1</div>
+      <div class="num">2</div>
       <div class="label">Planned</div>
     </div>
     <div class="stat-card overall">
-      <div class="num">93%</div>
+      <div class="num">92%</div>
       <div class="label">Overall complete</div>
     </div>
   </section>
@@ -609,13 +609,13 @@
   <section class="progress-panel">
     <div class="progress-panel-top">
       <h2>Overall progress</h2>
-      <span class="progress-pct">93%</span>
+      <span class="progress-pct">92%</span>
     </div>
     <div class="progress-track">
-      <div class="progress-fill" style="width: 93%;"></div>
+      <div class="progress-fill" style="width: 92%;"></div>
     </div>
     <div class="progress-caption">
-      <span>23 tracked work items (excludes Backlog — see the Backlog tab below)</span>
+      <span>24 tracked work items (excludes Backlog — see the Backlog tab below)</span>
       <span>Weighted: done = 100%, in progress = 50%</span>
     </div>
   </section>
@@ -635,7 +635,7 @@
         <li>Bluetooth P2P sharing (nearby list, tap-to-share, accept/decline) is built and unit/widget-tested against a fake BLE service, but the real native transport (`bluetooth_low_energy`'s Android/iOS platform channels) can't be exercised in this environment — no BLE radio, and neither the iOS Simulator nor most Android emulators support real BLE peripheral/central operation. A follow-up pass with two physical devices is needed to confirm real-world pairing. 360° cards would need similar native-plugin work (a panoramic viewer) but have been deprioritized to the Backlog tab.</li>
         <li>The app now ships under its real, live production identifier (<code>com.Mediahouse.VBCapp</code>, both Android and iOS — confirmed directly from Unity's own project settings) instead of the Flutter template placeholder, since the plan is for this app to replace Unity's as an update to the same store listings, not launch separately. This meaningfully de-risks the three items below — Play Console/App Store Connect's product catalogs, OneSignal's Android FCM sender, and the domain's App/Universal Link association files should all already exist for this exact identity from the live Unity app — but none of it has been confirmed against a real signed build yet, and Android specifically still needs the release build **signed with the same keystore** Unity ships with (matching applicationId alone isn't sufficient for Google Play to accept an update).</li>
         <li>The paid-subscription purchase flow (both iOS StoreKit and Android Play Billing) is wired for release builds; with the real applicationId now in place, the existing product catalogs should apply without new console setup, but that's unconfirmed from this environment. Server-side receipt verification is tracked separately in the Backlog tab (see ADR 0001).</li>
-        <li>Push notifications are fully wired (OneSignal init, permission request, click routing, session identity linking) and unit/widget-tested — the receiving UI (banner + full screen) is done — but real delivery hasn't been verified on a device. Android's FCM sender is likely already configured (same OneSignal App ID + real package name the live Unity app already uses); iOS still needs a one-time "Push Notifications" Xcode capability pass plus confirming an APNs key exists for this Team/bundle id (see ADR 0002).</li>
+        <li>Push notifications is marked Done (OneSignal init, permission request, click routing, session identity linking, receiving UI — all wired and unit/widget-tested), but iOS still needs one native-project action before it can actually deliver: enabling the "Push Notifications" capability in Xcode (tracked as its own separate roadmap item, "Native Config (Xcode)," rather than blocking this row, since it's not app code). Android's FCM sender is likely already configured (same OneSignal App ID + real package name the live Unity app already uses). See ADR 0002.</li>
         <li>Widget &amp; deep-link sharing's app-side logic is code-complete and tested, including a real bug caught before shipping (the Android widget's `vbc_app://` scheme has an underscore, invalid per RFC 3986 — `package:app_links`' URI-based stream silently drops it, so the raw-string stream is used instead). The domain almost certainly already hosts the Android/iOS association files referencing this identity, since Unity's live app already handles these same links — but the iOS Associated Domains entitlement still needs a one-time Xcode capability pass to actually wire into the build (see ADR 0003).</li>
       </ul>
     </div>
@@ -736,7 +736,7 @@
     </div>
 
     <div class="area">
-      <h3>Engagement <span class="count">2 / 4 done</span></h3>
+      <h3>Engagement <span class="count">3 / 4 done</span></h3>
       <div class="feature-row" data-status="done">
         <div><div class="name">Send announcement</div><div class="note">Message + optional image, from the main view's active-card panel</div></div>
         <span class="pill done">Done</span>
@@ -745,9 +745,9 @@
         <div><div class="name">Receive announcements</div><div class="note">Both surfaces built and tested: a session-bootstrap banner on Home, and a full screen reached by tapping the push itself (message, sender, image, "Open sender's card"). Depends on the Push notifications transport below for real delivery</div></div>
         <span class="pill done">Done</span>
       </div>
-      <div class="feature-row" data-status="partial">
-        <div><div class="name">Push notifications</div><div class="note">OneSignal wired (init, permission request, click routing, session identity linking) and tested; Android POST_NOTIFICATIONS permission and iOS UIBackgroundModes now declared. Now ships under the real applicationId, so Android's FCM sender is likely already configured (same OneSignal App ID Unity's live app already uses); iOS still needs a one-time Xcode "Push Notifications" capability pass — see ADR 0002</div></div>
-        <span class="pill partial">In progress</span>
+      <div class="feature-row" data-status="done">
+        <div><div class="name">Push notifications</div><div class="note">OneSignal wired (init, permission request, click routing, session identity linking) and tested; Android POST_NOTIFICATIONS permission and iOS UIBackgroundModes now declared. Now ships under the real applicationId, so Android's FCM sender is likely already configured (same OneSignal App ID Unity's live app already uses). The one remaining piece — enabling the Push Notifications capability in Xcode — is tracked as its own separate roadmap item ("Native Config (Xcode)," below) rather than blocking this row, since it's a native-project action, not app code</div></div>
+        <span class="pill done">Done</span>
       </div>
       <div class="feature-row" data-status="planned">
         <div><div class="name">Tutorials / onboarding walkthroughs</div></div>
@@ -772,6 +772,14 @@
       <div class="feature-row" data-status="done">
         <div><div class="name">Dev/QA server switch panel</div><div class="note">Ten rapid taps on the login screen's version label (mirrors `DevSettings.cs`'s combo) opens a sheet to switch between Default/Test env/Localhost — persisted across restarts (Unity's own panel resets on every cold start)</div></div>
         <span class="pill done">Done</span>
+      </div>
+    </div>
+
+    <div class="area">
+      <h3>Native Config (Xcode) <span class="count">0 / 1 done</span></h3>
+      <div class="feature-row" data-status="planned">
+        <div><div class="name">Enable the Push Notifications capability in Xcode</div><div class="note">Owned by the user — a native-project action, not app code, so not something this session can do blind (see ADR 0002). Enabling "Push Notifications" under Runner target → Signing &amp; Capabilities wires the aps-environment entitlement into ios/Runner/Runner.entitlements (which already exists, added for Associated Domains during the deep-linking work). Also confirm an APNs auth key exists in the OneSignal dashboard for this Team/bundle id — likely already uploaded for Unity's live production app, just needs checking</div></div>
+        <span class="pill planned">Planned</span>
       </div>
     </div>
 
@@ -816,6 +824,16 @@
   <section class="changelog">
     <h2>Recent updates</h2>
     <ul class="changelog-list" id="changelogList">
+      <li>
+        <span class="date">22 Jul 2026</span>
+        <p class="entry-title">Dashboard fixes: Native Config (Xcode) moved into the roadmap; a layout bug in Risks &amp; Blockers</p>
+        <p class="entry-body">Per the user's correction, "Native Config (Xcode)" (enabling the Push Notifications capability in Xcode) is a real, separate roadmap item — not Backlog — so it moved into the main feature board as its own area/row rather than the Backlog tab. Overall count is now 24 tracked items (22 done, 0 in progress, 2 planned), 92%. Also fixed a real CSS bug the user spotted: any risk-list `&lt;li&gt;` containing an inline element (e.g. the `&lt;code&gt;com.Mediahouse.VBCapp&lt;/code&gt;` one) rendered with huge gaps and cramped-looking text, because `.risk-list li` was `display: flex` — which turns each text run around an inline element into its own rigid flex item instead of letting them wrap together as normal paragraph text. Replaced with the standard non-flex pattern (`position: relative` + `padding-left` on the `&lt;li&gt;`, an absolutely-positioned `::before` dot) so bulleted text now wraps normally regardless of what's inside it.</p>
+      </li>
+      <li>
+        <span class="date">22 Jul 2026</span>
+        <p class="entry-title">Push notifications marked Done; iOS capability toggle split into its own Backlog task</p>
+        <p class="entry-body">Reclassified per the user's call: the app-code side of push notifications (OneSignal init, permission request, click routing, session identity linking, receiving UI) is genuinely complete and tested, and the one remaining gap — enabling the "Push Notifications" capability on the Runner target in Xcode — is a native-project action the user owns, not app code, so it no longer blocks this row. Added a new Backlog area, "Native Config (Xcode)," with that task: enabling the capability wires the `aps-environment` entitlement into `ios/Runner/Runner.entitlements` (which already exists, added for Associated Domains during the deep-linking work), and should be paired with confirming an APNs auth key already exists in the OneSignal dashboard for this Team/bundle id. Engagement area is now 3/4 done; overall 22/23 (96%), with 0 rows now In progress.</p>
+      </li>
       <li>
         <span class="date">22 Jul 2026</span>
         <p class="entry-title">Added Release QA (real device) to Backlog; Push notifications stays In progress</p>
