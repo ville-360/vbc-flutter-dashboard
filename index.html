@@ -589,7 +589,7 @@
 
   <section class="stats">
     <div class="stat-card done">
-      <div class="num">22</div>
+      <div class="num">23</div>
       <div class="label">Completed</div>
     </div>
     <div class="stat-card partial">
@@ -597,11 +597,11 @@
       <div class="label">In progress</div>
     </div>
     <div class="stat-card planned">
-      <div class="num">2</div>
+      <div class="num">1</div>
       <div class="label">Planned</div>
     </div>
     <div class="stat-card overall">
-      <div class="num">92%</div>
+      <div class="num">96%</div>
       <div class="label">Overall complete</div>
     </div>
   </section>
@@ -609,10 +609,10 @@
   <section class="progress-panel">
     <div class="progress-panel-top">
       <h2>Overall progress</h2>
-      <span class="progress-pct">92%</span>
+      <span class="progress-pct">96%</span>
     </div>
     <div class="progress-track">
-      <div class="progress-fill" style="width: 92%;"></div>
+      <div class="progress-fill" style="width: 96%;"></div>
     </div>
     <div class="progress-caption">
       <span>24 tracked work items (excludes Backlog — see the Backlog tab below)</span>
@@ -624,9 +624,9 @@
     <div class="panel">
       <h2><span class="dot"></span>Current status &amp; milestone</h2>
       <span class="milestone-tag">Current milestone</span>
-      <p><strong>The core day-to-day usage loop is feature-complete:</strong> a user can sign up for a free trial, create a 2D card, edit it (with live upload/processing progress on the tile — as of this update), set it active, share it (QR, message, email, WhatsApp/Telegram, native share sheet, and now real Bluetooth P2P — see below), view it full-screen (including a saved contact's/shared card), manage their team under Users, build a saved-contacts address book by scanning a QR code, send a push-notification announcement to everyone who has their card, receive one back too (a session-bootstrap banner plus a full screen reached by tapping the push), permanently delete their account, and recover a forgotten password, all talking to the real production backend with unchanged request formats. Authentication &amp; Onboarding and Card Creation &amp; Management are now both fully done.</p>
+      <p><strong>The core day-to-day usage loop is feature-complete:</strong> a user can sign up for a free trial, create a 2D card, edit it (with live upload/processing progress on the tile — as of this update), set it active, share it (QR, message, email, WhatsApp/Telegram, native share sheet, and now real Bluetooth P2P — see below), view it full-screen (including a saved contact's/shared card), manage their team under Users, build a saved-contacts address book by scanning a QR code, send a push-notification announcement to everyone who has their card, receive one back too (a session-bootstrap banner plus a full screen reached by tapping the push), permanently delete their account, recover a forgotten password, and now learn the app itself — a Tutorials hub reachable from Home offers the same reference video Unity links to plus a from-scratch interactive walkthrough for both Create a Card and Share a Card. Authentication &amp; Onboarding, Card Creation &amp; Management, and Engagement are now all fully done.</p>
       <span class="milestone-tag next">Next milestone</span>
-      <p><strong>Not yet decided.</strong> Remaining candidates: Unity's separate already-paid-tenant Store surface and Tutorials/onboarding — see the Planned rows below. 360° cards have been moved to the <strong>Backlog</strong> tab and aren't part of the near-term roadmap.</p>
+      <p><strong>Not yet decided.</strong> The near-term roadmap is otherwise clear: Unity's separate already-paid-tenant Store surface remains an unscheduled candidate, and the one open row (enabling the Push Notifications capability in Xcode) is a native-project action owned by the user, not build work — see the Planned row below. 360° cards have been moved to the <strong>Backlog</strong> tab and aren't part of the near-term roadmap.</p>
     </div>
     <div class="panel">
       <h2><span class="dot" style="background: var(--risk);"></span>Risks &amp; blockers</h2>
@@ -736,7 +736,7 @@
     </div>
 
     <div class="area">
-      <h3>Engagement <span class="count">3 / 4 done</span></h3>
+      <h3>Engagement <span class="count">4 / 4 done</span></h3>
       <div class="feature-row" data-status="done">
         <div><div class="name">Send announcement</div><div class="note">Message + optional image, from the main view's active-card panel</div></div>
         <span class="pill done">Done</span>
@@ -749,9 +749,9 @@
         <div><div class="name">Push notifications</div><div class="note">OneSignal wired (init, permission request, click routing, session identity linking) and tested; Android POST_NOTIFICATIONS permission and iOS UIBackgroundModes now declared. Now ships under the real applicationId, so Android's FCM sender is likely already configured (same OneSignal App ID Unity's live app already uses). The one remaining piece — enabling the Push Notifications capability in Xcode — is tracked as its own separate roadmap item ("Native Config (Xcode)," below) rather than blocking this row, since it's a native-project action, not app code</div></div>
         <span class="pill done">Done</span>
       </div>
-      <div class="feature-row" data-status="planned">
-        <div><div class="name">Tutorials / onboarding walkthroughs</div></div>
-        <span class="pill planned">Planned</span>
+      <div class="feature-row" data-status="done">
+        <div><div class="name">Tutorials / onboarding walkthroughs</div><div class="note">A Tutorials hub (reached from Home) covers Create a Card and Share a Card, each offering the exact reference video Unity's SelectTutorial panel links to plus a from-scratch interactive walkthrough — small mock replicas of the real screens that only advance when the user taps the highlighted control, the one mechanic worth keeping from Unity's own tutorials (InstructionsManager.cs/SharingInstructions.cs/CardTutorial.cs), without the live-screen coupling or the spotlight-shader styling</div></div>
+        <span class="pill done">Done</span>
       </div>
     </div>
 
@@ -824,6 +824,11 @@
   <section class="changelog">
     <h2>Recent updates</h2>
     <ul class="changelog-list" id="changelogList">
+      <li>
+        <span class="date">23 Jul 2026</span>
+        <p class="entry-title">Tutorials / onboarding walkthroughs</p>
+        <p class="entry-body">New Tutorials hub (`lib/features/tutorials/`), reached by tapping the "Tutorials" pill on Home (previously a dummy) — the counterpart to Unity's `SelectTutorial` panel, but built as one cohesive system instead of the three independent ones Unity has (`InstructionsManager.cs`/`SharingInstructions.cs`/`CardTutorial.cs` — flagged as a systemic smell in this project's own architecture notes). Two topics, Create a Card and Share a Card, each offer the exact same reference YouTube video Unity's tutorial buttons link to (read directly out of `mainmenu.unity`'s scene data, since Unity has no source-level constant for them) plus a new interactive walkthrough. Every walkthrough step renders a small, purely illustrative mock of the real screen it's teaching — a fake contact list, a fake style picker, a fake QR/share sheet — and only advances when the user taps the one highlighted (pulsing-glow) control in it, which is the one piece of Unity's own tutorial mechanic worth preserving (a genuine tap, not a generic "Next" button) without copying its spotlight-hole shader look or, more importantly, without literally driving the live create-card/share screens the way Unity does — so working through a walkthrough can never create a real contact, card, or message. 26 new unit/widget tests (step-progress controller bounds, video-link regression guard, step-content sanity, full click-through of both walkthroughs including the submit step's async "creating…" delay, and the hub screen) — full suite is 344 tests, all passing, `flutter analyze` clean. This closes out the last "not yet started" item from the previous engagement work. Engagement is now fully done; overall 23/24 tracked items (96%), with only the user-owned Xcode Push Notifications capability toggle left open.</p>
+      </li>
       <li>
         <span class="date">22 Jul 2026</span>
         <p class="entry-title">Dashboard fixes: Native Config (Xcode) moved into the roadmap; a layout bug in Risks &amp; Blockers</p>
