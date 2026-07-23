@@ -593,15 +593,15 @@
       <div class="label">Completed</div>
     </div>
     <div class="stat-card partial">
-      <div class="num">0</div>
+      <div class="num">1</div>
       <div class="label">In progress</div>
     </div>
     <div class="stat-card planned">
-      <div class="num">1</div>
+      <div class="num">2</div>
       <div class="label">Planned</div>
     </div>
     <div class="stat-card overall">
-      <div class="num">96%</div>
+      <div class="num">90%</div>
       <div class="label">Overall complete</div>
     </div>
   </section>
@@ -609,13 +609,13 @@
   <section class="progress-panel">
     <div class="progress-panel-top">
       <h2>Overall progress</h2>
-      <span class="progress-pct">96%</span>
+      <span class="progress-pct">90%</span>
     </div>
     <div class="progress-track">
-      <div class="progress-fill" style="width: 96%;"></div>
+      <div class="progress-fill" style="width: 90%;"></div>
     </div>
     <div class="progress-caption">
-      <span>24 tracked work items (excludes Backlog — see the Backlog tab below)</span>
+      <span>26 tracked work items (excludes Backlog — see the Backlog tab below)</span>
       <span>Weighted: done = 100%, in progress = 50%</span>
     </div>
   </section>
@@ -626,7 +626,7 @@
       <span class="milestone-tag">Current milestone</span>
       <p><strong>The core day-to-day usage loop is feature-complete:</strong> a user can sign up for a free trial, create a 2D card, edit it (with live upload/processing progress on the tile — as of this update), set it active, share it (QR, message, email, WhatsApp/Telegram, native share sheet, and now real Bluetooth P2P — see below), view it full-screen (including a saved contact's/shared card), manage their team under Users, build a saved-contacts address book by scanning a QR code, send a push-notification announcement to everyone who has their card, receive one back too (a session-bootstrap banner plus a full screen reached by tapping the push), permanently delete their account, recover a forgotten password, and now learn the app itself — a Tutorials hub reachable from Home offers the same reference video Unity links to plus a from-scratch interactive walkthrough for both Create a Card and Share a Card. Authentication &amp; Onboarding, Card Creation &amp; Management, and Engagement are now all fully done.</p>
       <span class="milestone-tag next">Next milestone</span>
-      <p><strong>Not yet decided.</strong> The near-term roadmap is otherwise clear: Unity's separate already-paid-tenant Store surface remains an unscheduled candidate, and the one open row (enabling the Push Notifications capability in Xcode) is a native-project action owned by the user, not build work — see the Planned row below. 360° cards have been moved to the <strong>Backlog</strong> tab and aren't part of the near-term roadmap.</p>
+      <p><strong>Real-device release QA.</strong> With the near-term feature roadmap otherwise clear, the open work has shifted from this session to the user: verifying the app actually builds and installs on a physical Android/iOS device is now in progress, with verifying real-device-only features (Bluetooth pairing, push delivery, Universal/App Links, camera/QR scanning) queued right behind it. Unity's separate already-paid-tenant Store surface remains an unscheduled candidate, and enabling the Push Notifications capability in Xcode is a native-project action owned by the user, not build work. 360° cards have been moved to the <strong>Backlog</strong> tab and aren't part of the near-term roadmap.</p>
     </div>
     <div class="panel">
       <h2><span class="dot" style="background: var(--risk);"></span>Risks &amp; blockers</h2>
@@ -783,6 +783,18 @@
       </div>
     </div>
 
+    <div class="area">
+      <h3>Release QA (real device) <span class="count">0 / 2 done</span></h3>
+      <div class="feature-row" data-status="partial">
+        <div><div class="name">Verify the app builds on a real device</div><div class="note">In progress — owned by the user, not this session. Covers exactly what this environment structurally can't: a real signed build (Android keystore, iOS provisioning) actually installing and launching on physical hardware</div></div>
+        <span class="pill partial">In progress</span>
+      </div>
+      <div class="feature-row" data-status="planned">
+        <div><div class="name">Verify application features on a real device</div><div class="note">Owned by the user, not this session — to be performed once the build itself is confirmed. Covers everything already flagged throughout the roadmap/ADRs as "can't verify without a physical device": real Bluetooth P2P pairing, real push delivery, real Universal/App Link taps, real camera/QR scanning end to end, etc.</div></div>
+        <span class="pill planned">Planned</span>
+      </div>
+    </div>
+
   </section>
   </div>
 
@@ -806,24 +818,17 @@
         </div>
       </div>
 
-      <div class="area">
-        <h3>Release QA (real device) <span class="count">0 / 2 done</span></h3>
-        <div class="feature-row" data-status="planned">
-          <div><div class="name">Verify the app builds on a real device</div><div class="note">Owned by the user, not this session — to be performed once the rest of the roadmap is finished, then reported back. Covers exactly what this environment structurally can't: a real signed build (Android keystore, iOS provisioning) actually installing and launching on physical hardware</div></div>
-          <span class="pill planned">Planned</span>
-        </div>
-        <div class="feature-row" data-status="planned">
-          <div><div class="name">Verify application features on a real device</div><div class="note">Owned by the user, not this session — to be performed once the rest of the roadmap is finished, then reported back. Covers everything already flagged throughout the roadmap/ADRs as "can't verify without a physical device": real Bluetooth P2P pairing, real push delivery, real Universal/App Link taps, real camera/QR scanning end to end, etc.</div></div>
-          <span class="pill planned">Planned</span>
-        </div>
-      </div>
-
     </section>
   </div>
 
   <section class="changelog">
     <h2>Recent updates</h2>
     <ul class="changelog-list" id="changelogList">
+      <li>
+        <span class="date">23 Jul 2026</span>
+        <p class="entry-title">Release QA (real device) moved from Backlog into the roadmap; build verification now In progress</p>
+        <p class="entry-body">Per the user's call, "Release QA (real device)" is a real, near-term roadmap item now that the feature work is largely done — not a deferred Backlog concern — so it moved into the main feature board as its own area, right after Native Config (Xcode). "Verify the app builds on a real device" is now marked In progress (the user is running this themselves); "Verify application features on a real device" stays Planned, queued behind it. Tracked-item count is now 26 (23 done, 1 in progress, 2 planned), 90%.</p>
+      </li>
       <li>
         <span class="date">23 Jul 2026</span>
         <p class="entry-title">Tutorials / onboarding walkthroughs</p>
